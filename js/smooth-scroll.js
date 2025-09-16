@@ -248,8 +248,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if device is mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // Handle touch events for mobile - using native scrolling
+    // Handle touch events for mobile - using smooth scrolling
     let touchStartY = 0;
+    let touchStartScrollY = 0;
+    let lastTouchY = 0;
+    let lastTouchTime = 0;
+    let touchVelocity = 0;
     let isTouchActive = false;
     
     function handleTouchStart(e) {
@@ -257,25 +261,49 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const touch = e.touches[0];
         touchStartY = touch.clientY;
+        lastTouchY = touchStartY;
+        touchStartScrollY = window.scrollY;
+        lastTouchTime = performance.now();
         isTouchActive = true;
+        touchVelocity = 0;
+        
+        // Enable smooth scrolling for mobile
+        document.documentElement.style.scrollBehavior = 'smooth';
+        document.documentElement.style.overflowScrolling = 'touch';
+        document.documentElement.style.webkitOverflowScrolling = 'touch';
         
         // Cancel any ongoing animations
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
-        
-        // Disable smooth scrolling during touch
-        document.documentElement.style.scrollBehavior = 'auto';
-        document.documentElement.style.overflowScrolling = 'touch';
-        document.documentElement.style.webkitOverflowScrolling = 'touch';
     }
     
     function handleTouchMove(e) {
         if (!isMobile || !isTouchActive) return;
         
-        // Allow default touch behavior for native scrolling
-        // No need to prevent default or handle the scroll manually
+        const touchY = e.touches[0].clientY;
+        const now = performance.now();
+        const deltaTime = now - lastTouchTime;
+        
+        if (deltaTime > 0) {
+            // Calculate velocity
+            const deltaY = touchY - lastTouchY;
+            touchVelocity = (deltaY / deltaTime) * 1000; // pixels per second
+            lastTouchY = touchY;
+            lastTouchTime = now;
+            
+            // Directly update scroll position for immediate response
+            const newScroll = touchStartScrollY - (touchY - touchStartY);
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Apply boundaries
+            targetScrollY = Math.max(0, Math.min(newScroll, maxScroll));
+            
+            // Update current scroll position
+            currentScrollY = targetScrollY;
+            window.scrollTo(0, currentScrollY);
+        }
     }
     
     function handleTouchEnd() {
@@ -283,12 +311,23 @@ document.addEventListener('DOMContentLoaded', function() {
         
         isTouchActive = false;
         
-        // Re-enable smooth scrolling after a short delay
-        setTimeout(() => {
-            if (!isTouchActive) {  // Only if not already touching again
-                document.documentElement.style.scrollBehavior = 'smooth';
+        // Apply momentum if there's enough velocity
+        if (Math.abs(touchVelocity) > 100) {
+            const momentumDuration = 800; // ms
+            const distance = touchVelocity * (momentumDuration / 1000) * 0.3; // Reduced for subtle effect
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Calculate new target with boundaries
+            let newTarget = currentScrollY - distance;
+            targetScrollY = Math.max(0, Math.min(newTarget, maxScroll));
+            
+            // Start animation
+            if (!animationFrameId) {
+                isScrolling = true;
+                lastScrollTime = performance.now();
+                animationFrameId = requestAnimationFrame(animateScroll);
             }
-        }, 100);
+        }
     }
     
     // Handle anchor links with smooth scrolling
@@ -487,14 +526,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Touch events - using passive for better performance
         if (isMobile) {
-            // On mobile, use native scrolling for the best experience
-            document.documentElement.style.scrollBehavior = 'auto';
+            // On mobile, use smooth scrolling with touch support
+            document.documentElement.style.scrollBehavior = 'smooth';
             document.documentElement.style.overflowScrolling = 'touch';
             document.documentElement.style.webkitOverflowScrolling = 'touch';
             
-            // Add touch event listeners with passive: true for better performance
-            window.addEventListener('touchstart', handleTouchStart, { passive: true });
-            window.addEventListener('touchmove', handleTouchMove, { passive: true });
+            // Add touch event listeners with passive: false to allow preventDefault
+            window.addEventListener('touchstart', handleTouchStart, { passive: false });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
             window.addEventListener('touchend', handleTouchEnd, { passive: true });
             window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
         } else {
