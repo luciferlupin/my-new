@@ -245,131 +245,50 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Handle touch events for mobile
+    // Check if device is mobile
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Handle touch events for mobile - using native scrolling
     let touchStartY = 0;
-    let lastTouchY = 0;
-    let touchVelocity = 0;
-    let lastTouchTime = 0;
-    let isScrollbarInteraction = false;
-    let touchMoved = false;
-    let touchStartScrollY = 0;
+    let isTouchActive = false;
     
     function handleTouchStart(e) {
+        if (!isMobile) return;
+        
         const touch = e.touches[0];
         touchStartY = touch.clientY;
-        lastTouchY = touchStartY;
-        lastTouchTime = performance.now();
-        touchMoved = false;
-        touchStartScrollY = window.scrollY;
+        isTouchActive = true;
         
-        // Check if touch is near the edge (potential scrollbar on mobile)
-        const touchX = touch.clientX;
-        const windowWidth = window.innerWidth;
-        isScrollbarInteraction = (touchX > windowWidth * 0.9);
-        
-        if (!isScrollbarInteraction) {
-            isScrolling = true;
-            // Cancel any ongoing animations
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-            }
+        // Cancel any ongoing animations
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
         }
+        
+        // Disable smooth scrolling during touch
+        document.documentElement.style.scrollBehavior = 'auto';
+        document.documentElement.style.overflowScrolling = 'touch';
+        document.documentElement.style.webkitOverflowScrolling = 'touch';
     }
     
     function handleTouchMove(e) {
-        if (isScrollbarInteraction) return;
+        if (!isMobile || !isTouchActive) return;
         
-        const touchY = e.touches[0].clientY;
-        const deltaY = touchY - lastTouchY;
-        const now = performance.now();
-        const deltaTime = now - lastTouchTime;
-        
-        // Check if we've moved enough to consider this a scroll
-        if (!touchMoved && Math.abs(touchY - touchStartY) > 5) {
-            touchMoved = true;
-            isScrolling = true;
-            e.preventDefault();
-        }
-        
-        if (!touchMoved) return;
-        
-        e.preventDefault();
-        
-        if (deltaTime > 0) {
-            // Calculate velocity (pixels per second)
-            touchVelocity = (deltaY / deltaTime) * 1000;
-            lastTouchY = touchY;
-            lastTouchTime = now;
-            
-            // Directly update scroll position for immediate response
-            const newScroll = touchStartScrollY - (touchY - touchStartY);
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            
-            // Apply rubber band effect at boundaries
-            if (newScroll < 0) {
-                targetScrollY = newScroll * 0.3; // Rubber band effect when pulling down at top
-            } else if (newScroll > maxScroll) {
-                targetScrollY = maxScroll + (newScroll - maxScroll) * 0.3; // Rubber band effect when pulling up at bottom
-            } else {
-                targetScrollY = newScroll;
-            }
-            
-            // Update current scroll position immediately for responsive feel
-            currentScrollY = targetScrollY;
-            window.scrollTo(0, currentScrollY);
-            
-            // Start animation if not running
-            if (!animationFrameId) {
-                animationFrameId = requestAnimationFrame(animateScroll);
-            }
-        }
+        // Allow default touch behavior for native scrolling
+        // No need to prevent default or handle the scroll manually
     }
-
-    // Handle touch end with momentum scrolling
-    function handleTouchEnd(e) {
-        if (!touchMoved || isScrollbarInteraction) {
-            resetScrollState();
-            return;
-        }
+    
+    function handleTouchEnd() {
+        if (!isMobile) return;
         
-        // Apply momentum based on the last velocity
-        if (Math.abs(touchVelocity) > 50) { // Only apply momentum if velocity is significant
-            // Calculate target position based on velocity
-            const momentumDuration = 1000; // ms
-            const distance = touchVelocity * (momentumDuration / 1000) * 0.5; // Reduce distance for better feel
-            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            
-            // Calculate new target position with boundaries
-            let newTarget = currentScrollY - distance;
-            
-            // Apply boundaries with rubber band effect
-            if (newTarget < 0) {
-                newTarget = 0 - Math.pow(-newTarget, 0.8);
-            } else if (newTarget > maxScroll) {
-                newTarget = maxScroll + Math.pow(newTarget - maxScroll, 0.8);
-            }
-            
-            // Update target position
-            targetScrollY = Math.max(0, Math.min(newTarget, maxScroll));
-            
-            // Start animation if not running
-            if (!animationFrameId) {
-                isScrolling = true;
-                lastScrollTime = performance.now();
-                animationFrameId = requestAnimationFrame(animateScroll);
-            }
-        } else {
-            // If velocity is low, just snap to the nearest position
-            const currentScroll = window.scrollY;
-            currentScrollY = currentScroll;
-            targetScrollY = currentScroll;
-            lastKnownScrollPosition = currentScroll;
-        }
+        isTouchActive = false;
         
-        // Reset touch state
-        touchMoved = false;
-        touchVelocity = 0;
+        // Re-enable smooth scrolling after a short delay
+        setTimeout(() => {
+            if (!isTouchActive) {  // Only if not already touching again
+                document.documentElement.style.scrollBehavior = 'smooth';
+            }
+        }, 100);
     }
     
     // Handle anchor links with smooth scrolling
@@ -566,10 +485,24 @@ document.addEventListener('DOMContentLoaded', function() {
             lastKnownScrollPosition = currentScroll;
         });
         
-        // Touch events
-        window.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
-        window.addEventListener('touchend', handleTouchEnd, { passive: true });
+        // Touch events - using passive for better performance
+        if (isMobile) {
+            // On mobile, use native scrolling for the best experience
+            document.documentElement.style.scrollBehavior = 'auto';
+            document.documentElement.style.overflowScrolling = 'touch';
+            document.documentElement.style.webkitOverflowScrolling = 'touch';
+            
+            // Add touch event listeners with passive: true for better performance
+            window.addEventListener('touchstart', handleTouchStart, { passive: true });
+            window.addEventListener('touchmove', handleTouchMove, { passive: true });
+            window.addEventListener('touchend', handleTouchEnd, { passive: true });
+            window.addEventListener('touchcancel', handleTouchEnd, { passive: true });
+        } else {
+            // On desktop, keep the existing smooth scrolling behavior
+            window.addEventListener('touchstart', handleTouchStart, { passive: true });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+            window.addEventListener('touchend', handleTouchEnd, { passive: true });
+        }
         
         // Handle page visibility changes
         document.addEventListener('visibilitychange', handleVisibilityChange);
