@@ -1,0 +1,81 @@
+/* Dark theme for Why Us section */
+#why-us {
+  background-color: #121212 !important;
+  color: #ffffff !important;
+  padding: 4rem 0 !important;
+}
+
+#why-us .section-header h2,
+#why-us .section-subtitle {
+  color: #ffffff !important;
+}
+
+#why-us .comparison-card {
+  background: #1e1e1e !important;
+  border: 1px solid #333 !important;
+  color: #e0e0e0 !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+#why-us .comparison-card:hover {
+  transform: translateY(-5px) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+  border-color: #444 !important;
+}
+
+#why-us .card-icon {
+  color: #4dabf7 !important;
+  background: rgba(77, 171, 247, 0.1) !important;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 auto 1.5rem !important;
+  font-size: 1.5rem !important;
+}
+
+#why-us .comparison-card h3 {
+  color: #ffffff !important;
+  margin-bottom: 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+#why-us .comparison-list li {
+  color: #e0e0e0 !important;
+  border-left: 2px solid #4dabf7 !important;
+  padding-left: 1rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.3s ease !important;
+}
+
+#why-us .comparison-list li:hover {
+  border-left-width: 4px !important;
+  padding-left: 1.2rem !important;
+}
+
+#why-us .comparison-list i {
+  color: #4dabf7 !important;
+  margin-right: 0.5rem !important;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  #why-us {
+    padding: 3rem 0 !important;
+  }
+  
+  #why-us .comparison-card {
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  #why-us .section-header h2 {
+    font-size: 2rem !important;
+  }
+  
+  #why-us .section-subtitle {
+    font-size: 1.1rem !important;
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "kaizer-website",
+  "version": "1.0.0",
+  "description": "Kaizer - Building the Future of Business, Trading & AI",
+  "scripts": {
+    "build": "node build.js",
+    "optimize-images": "node optimize-images.js"
+  },
+  "devDependencies": {
+    "clean-css": "^5.3.2",
+    "sharp": "^0.32.1"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11",
+    "maintained node versions"
+  ]
+}
