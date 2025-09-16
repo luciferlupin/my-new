@@ -251,12 +251,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let touchVelocity = 0;
     let lastTouchTime = 0;
     let isScrollbarInteraction = false;
+    let touchMoved = false;
+    let touchStartScrollY = 0;
     
     function handleTouchStart(e) {
         const touch = e.touches[0];
         touchStartY = touch.clientY;
         lastTouchY = touchStartY;
         lastTouchTime = performance.now();
+        touchMoved = false;
+        touchStartScrollY = window.scrollY;
         
         // Check if touch is near the edge (potential scrollbar on mobile)
         const touchX = touch.clientX;
@@ -265,27 +269,55 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (!isScrollbarInteraction) {
             isScrolling = true;
+            // Cancel any ongoing animations
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
         }
     }
     
     function handleTouchMove(e) {
-        if (isScrollbarInteraction || !isScrolling) return;
-        
-        e.preventDefault();
+        if (isScrollbarInteraction) return;
         
         const touchY = e.touches[0].clientY;
+        const deltaY = touchY - lastTouchY;
         const now = performance.now();
         const deltaTime = now - lastTouchTime;
         
+        // Check if we've moved enough to consider this a scroll
+        if (!touchMoved && Math.abs(touchY - touchStartY) > 5) {
+            touchMoved = true;
+            isScrolling = true;
+            e.preventDefault();
+        }
+        
+        if (!touchMoved) return;
+        
+        e.preventDefault();
+        
         if (deltaTime > 0) {
-            const velocity = (touchY - lastTouchY) / deltaTime;
-            touchVelocity = velocity * 1000; // Convert to pixels/second
+            // Calculate velocity (pixels per second)
+            touchVelocity = (deltaY / deltaTime) * 1000;
             lastTouchY = touchY;
             lastTouchTime = now;
             
-            // Update target scroll position
-            targetScrollY -= (touchY - touchStartY) * 2; // Adjust multiplier for sensitivity
-            targetScrollY = Math.max(0, Math.min(targetScrollY, document.documentElement.scrollHeight - window.innerHeight));
+            // Directly update scroll position for immediate response
+            const newScroll = touchStartScrollY - (touchY - touchStartY);
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Apply rubber band effect at boundaries
+            if (newScroll < 0) {
+                targetScrollY = newScroll * 0.3; // Rubber band effect when pulling down at top
+            } else if (newScroll > maxScroll) {
+                targetScrollY = maxScroll + (newScroll - maxScroll) * 0.3; // Rubber band effect when pulling up at bottom
+            } else {
+                targetScrollY = newScroll;
+            }
+            
+            // Update current scroll position immediately for responsive feel
+            currentScrollY = targetScrollY;
+            window.scrollTo(0, currentScrollY);
             
             // Start animation if not running
             if (!animationFrameId) {
@@ -294,6 +326,52 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Handle touch end with momentum scrolling
+    function handleTouchEnd(e) {
+        if (!touchMoved || isScrollbarInteraction) {
+            resetScrollState();
+            return;
+        }
+        
+        // Apply momentum based on the last velocity
+        if (Math.abs(touchVelocity) > 50) { // Only apply momentum if velocity is significant
+            // Calculate target position based on velocity
+            const momentumDuration = 1000; // ms
+            const distance = touchVelocity * (momentumDuration / 1000) * 0.5; // Reduce distance for better feel
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            
+            // Calculate new target position with boundaries
+            let newTarget = currentScrollY - distance;
+            
+            // Apply boundaries with rubber band effect
+            if (newTarget < 0) {
+                newTarget = 0 - Math.pow(-newTarget, 0.8);
+            } else if (newTarget > maxScroll) {
+                newTarget = maxScroll + Math.pow(newTarget - maxScroll, 0.8);
+            }
+            
+            // Update target position
+            targetScrollY = Math.max(0, Math.min(newTarget, maxScroll));
+            
+            // Start animation if not running
+            if (!animationFrameId) {
+                isScrolling = true;
+                lastScrollTime = performance.now();
+                animationFrameId = requestAnimationFrame(animateScroll);
+            }
+        } else {
+            // If velocity is low, just snap to the nearest position
+            const currentScroll = window.scrollY;
+            currentScrollY = currentScroll;
+            targetScrollY = currentScroll;
+            lastKnownScrollPosition = currentScroll;
+        }
+        
+        // Reset touch state
+        touchMoved = false;
+        touchVelocity = 0;
+    }
+    
     // Handle anchor links with smooth scrolling
     function handleAnchorClick(e) {
         const targetId = this.getAttribute('href');
@@ -490,8 +568,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Touch events
         window.addEventListener('touchstart', handleTouchStart, { passive: true });
-        window.addEventListener('touchmove', handleTouchMove, { passive: false });
-        window.addEventListener('touchend', resetScrollState, { passive: true });
+        window.addEventListener('touchmove', handleTouchMove, { passive: false, capture: true });
+        window.addEventListener('touchend', handleTouchEnd, { passive: true });
         
         // Handle page visibility changes
         document.addEventListener('visibilitychange', handleVisibilityChange);
