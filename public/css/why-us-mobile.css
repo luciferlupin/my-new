@@ -1,0 +1,70 @@
+/* Mobile styles for Why Us section */
+@media (max-width: 768px) {
+  #why-us .comparison-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+    padding: 0 var(--mobile-padding-x) !important;
+  }
+
+  #why-us .comparison-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5rem !important;
+    box-sizing: border-box !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  #why-us .card-icon {
+    margin-bottom: 1rem !important;
+  }
+
+  #why-us .comparison-card h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 1rem !important;
+    text-align: center !important;
+  }
+
+  #why-us .comparison-list {
+    padding-left: 1rem !important;
+  }
+
+  #why-us .comparison-list li {
+    margin-bottom: 0.75rem !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    padding-left: 1.5rem !important;
+    position: relative !important;
+  }
+
+  #why-us .comparison-list li i {
+    position: absolute !important;
+    left: -1.5rem !important;
+    top: 0.25rem !important;
+    color: #007bff !important;
+  }
+
+  /* Ensure proper spacing between stacked cards */
+  #why-us .comparison-card:not(:last-child) {
+    margin-bottom: 1.5rem !important;
+  }
+
+  /* Adjust section header for mobile */
+  #why-us .section-header {
+    padding: 0 var(--mobile-padding-x) !important;
+    margin-bottom: 2rem !important;
+  }
+
+  #why-us .section-header h2 {
+    font-size: 1.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  #why-us .section-subtitle {
+    font-size: 1.1rem !important;
+    line-height: 1.5 !important;
+  }
+}

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Layout Test | Kaizer</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        h1 {
+            color: #1a1a1a;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .test-header {
+            background: #1a1a1a;
+            color: white;
+            padding: 1rem;
+            font-weight: 600;
+        }
+        .test-content {
+            padding: 1.5rem;
+        }
+        .viewport-info {
+            background: #e9ecef;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+        }
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+        .test-image {
+            width: 100%;
+            height: 120px;
+            background: #e9ecef;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #1a1a1a;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 1rem;
+            transition: all 0.2s ease;
+        }
+        .btn:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+        @media (max-width: 768px) {
+            .test-container {
+                padding: 1rem;
+            }
+            .test-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Mobile Layout Test</h1>
+        
+        <div class="test-section">
+            <div class="test-header">Viewport Information</div>
+            <div class="test-content">
+                <div class="viewport-info" id="viewport-info">
+                    Loading viewport information...
+                </div>
+                <p>This page helps test the mobile layout across different screen sizes. Resize your browser window to see how the layout responds.</p>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-header">Test Cards</div>
+            <div class="test-content">
+                <p>These cards should stack vertically on mobile and display in a grid on larger screens.</p>
+                <div class="test-grid">
+                    <div class="test-card">
+                        <div class="test-image">Image 1</div>
+                        <h3>Card Title 1</h3>
+                        <p>This is a test card with some sample content to demonstrate the layout.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                    <div class="test-card">
+                        <div class="test-image">Image 2</div>
+                        <h3>Card Title 2</h3>
+                        <p>This is another test card with different content to show variation.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                    <div class="test-card">
+                        <div class="test-image">Image 3</div>
+                        <h3>Card Title 3</h3>
+                        <p>A third test card to complete the grid layout on larger screens.</p>
+                        <a href="#" class="btn">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-header">Test Form</div>
+            <div class="test-content">
+                <p>Form elements should be easily tappable on mobile devices.</p>
+                <form id="test-form" style="max-width: 500px; margin: 0 auto;">
+                    <div style="margin-bottom: 1rem;">
+                        <label for="name" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Name</label>
+                        <input type="text" id="name" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+                    </div>
+                    <div style="margin-bottom: 1.5rem;">
+                        <label for="email" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Email</label>
+                        <input type="email" id="email" style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;">
+                    </div>
+                    <button type="submit" style="background: #1a1a1a; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; width: 100%;">
+                        Submit Form
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-header">Test Navigation</div>
+            <div class="test-content">
+                <p>Navigation should be easily tappable on mobile devices.</p>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <a href="#" style="padding: 0.75rem 1.5rem; background: #f1f3f5; border-radius: 6px; text-decoration: none; color: #333; font-weight: 500;">Home</a>
+                    <a href="#" style="padding: 0.75rem 1.5rem; background: #f1f3f5; border-radius: 6px; text-decoration: none; color: #333; font-weight: 500;">Services</a>
+                    <a href="#" style="padding: 0.75rem 1.5rem; background: #f1f3f5; border-radius: 6px; text-decoration: none; color: #333; font-weight: 500;">About</a>
+                    <a href="#" style="padding: 0.75rem 1.5rem; background: #1a1a1a; color: white; border-radius: 6px; text-decoration: none; font-weight: 500;">Contact</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Update viewport information
+        function updateViewportInfo() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const dpr = window.devicePixelRatio || 1;
+            const info = document.getElementById('viewport-info');
+            
+            let deviceType = 'Desktop';
+            if (width < 768) {
+                deviceType = 'Mobile';
+            } else if (width < 1024) {
+                deviceType = 'Tablet';
+            }
+            
+            info.innerHTML = `
+                <strong>Device:</strong> ${deviceType}<br>
+                <strong>Viewport:</strong> ${width} × ${height} pixels<br>
+                <strong>Device Pixel Ratio:</strong> ${dpr.toFixed(1)}<br>
+                <strong>Media Query:</strong> ${window.matchMedia('(max-width: 768px)').matches ? 'Mobile' : 'Desktop'}
+            `;
+        }
+        
+        // Update on load and resize
+        window.addEventListener('load', updateViewportInfo);
+        window.addEventListener('resize', updateViewportInfo);
+        
+        // Prevent form submission
+        document.getElementById('test-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Form submitted! (This is a test)');
+        });
+    </script>
+</body>
+</html>

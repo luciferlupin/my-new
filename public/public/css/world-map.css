@@ -1,0 +1,230 @@
+/* World Map Animation */
+.world-map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.world-map-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: grayscale(100%) contrast(1.2) brightness(1.1);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+    will-change: transform;
+    transform: scale(1);
+    mix-blend-mode: luminosity;
+}
+
+.map-node {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #4fc3f7;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: nodeAppear 0.5s forwards;
+    animation-delay: var(--delay);
+    box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.3);
+    z-index: 2;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s ease;
+    will-change: transform, box-shadow;
+}
+
+.map-node.active {
+    transform: translate(-50%, -50%) scale(1);
+    animation: nodePulse 2s infinite alternate;
+    animation-delay: var(--delay, 0s);
+}
+
+.map-node:hover {
+    transform: translate(-50%, -50%) scale(1.8) !important;
+    box-shadow: 0 0 0 8px rgba(33, 150, 243, 0.3);
+    z-index: 10;
+}
+
+.map-node .node-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: all 0.4s ease-out;
+}
+
+.map-node.active .node-pulse {
+    animation: pulse 2s infinite;
+    opacity: 0.6;
+}
+
+@keyframes nodePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+    }
+}
+
+.connection-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, #4fc3f7, #2196f3);
+    transform-origin: 0 0;
+    opacity: 0;
+    width: 0;
+    transition: opacity 0.8s ease, width 1s ease;
+    z-index: 1;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+}
+
+.connection-line::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) translateX(4px);
+    width: 6px;
+    height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 2px rgba(33, 150, 243, 0.8);
+    animation: moveDot 2s infinite linear;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.connection-line::before {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #4fc3f7;
+    border-radius: 50%;
+    top: -2px;
+    left: 0;
+    animation: moveDot 3s linear infinite;
+    animation-delay: 2s;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.connection-line.active::before {
+    opacity: 1;
+}
+
+.connection-line.highlight {
+    height: 3px;
+    background: linear-gradient(90deg, #4fc3f7, #6ad2ff);
+    z-index: 5;
+}
+
+.connection-line.highlight::after {
+    opacity: 1;
+}
+
+.pulse-effect {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(79, 195, 247, 0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: pulse 3s infinite;
+    animation-delay: 2.5s;
+    z-index: 3;
+}
+
+@keyframes nodeAppear {
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        left: var(--x);
+        top: var(--y);
+    }
+}
+
+@keyframes drawLine {
+    from {
+        width: 0;
+        opacity: 0;
+    }
+    to {
+        width: var(--width, 100px);
+        opacity: 1;
+    }
+}
+
+@keyframes moveDot {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.8;
+    }
+    70% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+}
+
+/* Position the connection lines */
+.connection-line {
+    left: var(--x1);
+    top: var(--y1);
+    --width: 0;
+    --angle: 0;
+    transform: rotate(var(--angle));
+    transform-origin: 0 50%;
+}
+
+/* Calculate line lengths and angles */
+.connection-line {
+    --dx: calc(var(--x2) - var(--x1));
+    --dy: calc(var(--y2) - var(--y1));
+    --length: calc(sqrt(var(--dx) * var(--dx) * 1% * 1% + var(--dy) * var(--dy) * 1% * 1%) * 1px);
+    --angle: calc(atan2(var(--dy), var(--dx)) * 180 / 3.14159);
+    width: var(--length);
+}
+
+/* Add location names to nodes */
+.map-node[data-location="NA"] { --location: "North America"; }
+.map-node[data-location="EU"] { --location: "Europe"; }
+.map-node[data-location="AS"] { --location: "Asia"; }
+.map-node[data-location="SA"] { --location: "South America"; }
+.map-node[data-location="AF"] { --location: "Africa"; }
+.map-node[data-location="OC"] { --location: "Oceania"; }
+
+/* Add this to your HTML head to ensure the math functions work */
+/* <script>document.documentElement.style.setProperty('--x1', '0');</script> */

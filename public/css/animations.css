@@ -1,0 +1,261 @@
+/* Base Animation Styles */
+[class*="fade-in"],
+[class*="slide-in"],
+[class*="zoom-in"] {
+    opacity: 0;
+    transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1), 
+                transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Fade In Up */
+.fade-in-up {
+    transform: translateY(40px);
+    transition-delay: 0.1s;
+}
+
+.fade-in-up.animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1.2);
+}
+
+/* Fade In */
+.fade-in {
+    opacity: 0;
+}
+
+.fade-in.animate {
+    opacity: 1;
+}
+
+/* Slide In Left */
+.slide-in-left {
+    transform: translateX(-60px);
+    transition-delay: 0.15s;
+}
+
+.slide-in-left.animate {
+    opacity: 1;
+    transform: translateX(0);
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1.1);
+}
+
+/* Slide In Right */
+.slide-in-right {
+    transform: translateX(50px);
+}
+
+.slide-in-right.animate {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Zoom In */
+.zoom-in {
+    transform: scale(0.9);
+    transition-delay: 0.1s;
+}
+
+.zoom-in.animate {
+    opacity: 1;
+    transform: scale(1);
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1.1);
+}
+
+/* Staggered Animations */
+[data-stagger] {
+    opacity: 0;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+/* Service Card Animations */
+.service-pill.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.1);
+    transition-delay: calc(var(--delay, 0) * 1ms);
+    will-change: transform, opacity;
+}
+
+.service-pill.animate-on-scroll.animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Hover Effects */
+.service-pill {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-pill:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon Animation */
+.service-icon {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.service-pill:hover .service-icon {
+    transform: scale(1.1) rotate(5deg);
+    color: var(--accent-color, #4a90e2);
+}
+
+/* Content Animation */
+.service-content h3 {
+    transition: transform 0.3s ease;
+}
+
+.service-pill:hover .service-content h3 {
+    transform: translateX(5px);
+}
+
+/* Staggered Animation */
+.services-grid {
+    perspective: 1000px;
+}
+
+.service-pill {
+    transform-style: preserve-3d;
+}
+
+/* Responsive Adjustments */
+@media (prefers-reduced-motion: reduce) {
+    [class*="fade-in"],
+    [class*="slide-in"],
+    [class*="zoom-in"],
+    [data-stagger] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
+
+/* Performance Optimizations */
+@media (min-width: 1024px) {
+    [class*="fade-in"],
+    [class*="slide-in"],
+    [class*="zoom-in"] {
+        transition-duration: 1s;
+    }
+}
+
+/* Comparison Card Animations */
+.comparison-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.comparison-card[data-aos^="fade"].aos-animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Card hover effects */
+.comparison-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.6s ease, transform 0.6s ease;
+}
+
+.comparison-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Icon animation */
+.comparison-card .card-icon {
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.comparison-card:hover .card-icon {
+    transform: scale(1.1) rotate(5deg);
+    color: #4a90e2;
+}
+
+/* List item animation */
+.comparison-list li {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.4s ease;
+    transition-delay: calc(var(--index) * 0.1s);
+}
+
+.comparison-card[data-aos^="fade"].aos-animate .comparison-list li {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Staggered animation for list items */
+.comparison-list li:nth-child(1) { --index: 1; }
+.comparison-list li:nth-child(2) { --index: 2; }
+.comparison-list li:nth-child(3) { --index: 3; }
+.comparison-list li:nth-child(4) { --index: 4; }
+
+/* Our Work Section Animations */
+.work-showcase .section-title {
+    position: relative;
+    display: inline-block;
+    transform: scale(0.95);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.2), 
+                opacity 0.6s ease;
+    opacity: 0;
+    transform-origin: left center;
+}
+
+.work-showcase .section-title.animate {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.work-showcase .section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #4a90e2, #8a2be2);
+    transition: width 0.5s ease;
+}
+
+.work-showcase .section-title:hover::after {
+    width: 100%;
+}
+
+.work-showcase .section-subtitle {
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1.2) 0.2s, 
+                opacity 0.6s ease 0.2s;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.work-showcase .section-subtitle.animate {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.work-showcase .section-subtitle::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8a2be2, transparent);
+    transition: width 0.4s ease;
+}
+
+.work-showcase .section-subtitle:hover::after {
+    width: 100%;
+}

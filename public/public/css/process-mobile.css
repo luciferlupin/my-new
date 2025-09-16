@@ -1,0 +1,138 @@
+/* Mobile styles for Process Section */
+@media (max-width: 768px) {
+  .process-section {
+    padding: 3rem 1rem !important;
+    overflow: hidden !important;
+  }
+
+  .process-steps {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2rem !important;
+  }
+
+  .process-step {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 1.5rem !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 12px !important;
+    position: relative !important;
+  }
+
+  /* Fix for Step 2 - Sliding Tools */
+  .process-step[data-step="2"] .step-animation {
+    width: 100% !important;
+    overflow: hidden !important;
+    margin-top: 1.5rem !important;
+    position: relative !important;
+  }
+
+  .tech-stack-wrapper {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .tech-stack-track {
+    display: inline-flex !important;
+    gap: 1rem !important;
+    padding: 0.5rem 0 !important;
+    animation: scroll 30s linear infinite !important;
+  }
+
+  .tech-icon {
+    flex: 0 0 auto !important;
+    width: 80px !important;
+    height: 80px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.5rem !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .tech-icon i {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.5rem !important;
+    color: #4dabf7 !important;
+  }
+
+  .tech-icon span {
+    font-size: 0.7rem !important;
+    text-align: center !important;
+    color: #e0e0e0 !important;
+  }
+
+  /* Fix for Step 5 - Scale & Lead Animation */
+  .process-step[data-step="5"] .step-animation {
+    width: 100% !important;
+    height: 200px !important;
+    margin-top: 1.5rem !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border-radius: 12px !important;
+    background: rgba(77, 171, 247, 0.1) !important;
+    border: 1px solid rgba(77, 171, 247, 0.2) !important;
+  }
+
+  /* Step number styling */
+  .step-number {
+    position: absolute !important;
+    top: -15px !important;
+    left: 20px !important;
+    background: #4dabf7 !important;
+    color: #fff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+    z-index: 2 !important;
+  }
+
+  /* Step content */
+  .step-content {
+    padding: 1rem 0 !important;
+  }
+
+  .step-content h3 {
+    font-size: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+    color: #ffffff !important;
+  }
+
+  .step-content p {
+    color: #e0e0e0 !important;
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Animation for the sliding tools */
+  @keyframes scroll {
+    0% {
+      transform: translateX(0) !important;
+    }
+    100% {
+      transform: translateX(calc(-250px * 4)) !important;
+    }
+  }
+
+  /* Hide horizontal scrollbar */
+  .tech-stack-wrapper::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .tech-stack-wrapper {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}

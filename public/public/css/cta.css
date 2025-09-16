@@ -1,0 +1,90 @@
+/* CTA Section Styles */
+.cta-section {
+    background: #000000;
+    padding: 3rem 1rem;
+    text-align: center;
+    color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section .particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.cta-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.cta-company-name {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+}
+
+.cta-contact {
+    margin: 1.5rem 0;
+    line-height: 1.8;
+}
+
+.cta-contact a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+    display: block;
+    margin: 0.5rem 0;
+}
+
+.cta-contact a:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+.cta-social {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.cta-social a {
+    color: #ffffff;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cta-social a:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .cta-section {
+        padding: 4rem 2rem;
+    }
+    
+    .cta-company-name {
+        font-size: 2.2rem;
+    }
+    
+    .cta-contact {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+    }
+    
+    .cta-contact a {
+        margin: 0;
+    }
+}
