@@ -577,19 +577,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "retina_detect": true
     });
 
-    // Add smooth scroll to all links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        });
-    });
+    // Use native browser anchor navigation (no custom smooth scrolling)
 
     // Animate process steps on scroll
     function initProcessSection() {
