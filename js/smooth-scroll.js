@@ -252,13 +252,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if device is mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // If mobile, use default scrolling
+    // Enable touch scrolling with native-like behavior
     if (isMobile) {
-        // Re-enable default smooth scrolling
-        document.documentElement.style.scrollBehavior = 'smooth';
+        // Enable native-like touch scrolling
         document.documentElement.style.overflowScrolling = 'touch';
         document.documentElement.style.webkitOverflowScrolling = 'touch';
-        return; // Exit early for mobile devices
+        
+        // Remove any existing touch event listeners to prevent conflicts
+        document.removeEventListener('touchstart', handleTouchStart);
+        document.removeEventListener('touchmove', handleTouchMove);
+        document.removeEventListener('touchend', handleTouchEnd);
+        
+        // Let the browser handle touch scrolling natively
+        return;
     }
     
     // Desktop touch event handling (kept for devices that might have both touch and mouse)
