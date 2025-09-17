@@ -180,62 +180,66 @@ document.addEventListener('DOMContentLoaded', function() {
             if ((atTop || atBottom) && Math.abs(e.deltaY) > 0) {
                 isScrolling = false;
                 wheelVelocity = 0;
-                
-                // Update our scroll position to match the native scroll
                 currentScrollY = currentScroll;
                 targetScrollY = currentScroll;
-                
                 return true;
             }
             
-            // Don't prevent default for scrollbar wheel events or at boundaries
-            if (e.ctrlKey || isScrollbarEvent(e) || atTop || atBottom) {
-                // If we're at the boundary, let the native scroll handle it
-                if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
-                    isScrolling = false;
-                    wheelVelocity = 0;
-                    return true;
-                }
+            // Don't prevent default for scrollbar wheel events, ctrl key, or touchpad pinch-zoom
+            if (e.ctrlKey || e.metaKey || e.deltaMode === 1 || isScrollbarEvent(e)) {
                 return true;
             }
             
             e.preventDefault();
+            e.stopPropagation();
             
             const now = performance.now();
-            const delta = e.deltaY || e.detail || -e.wheelDelta; // Normalize wheel delta
+            // Normalize wheel delta (handling both wheel and trackpad events)
+            let delta = e.deltaY;
             
-            // Calculate time since last wheel event
-            const deltaTime = Math.min(now - lastWheelTime, 100); // Cap at 100ms
-            lastWheelTime = now;
-            
-            // Calculate velocity (viewport heights per second)
-            let velocity = 0;
-            if (deltaTime > 0) {
-                // Normalize wheel delta and apply sensitivity
-                const normalizedDelta = Math.sign(delta) * 
-                    Math.max(Math.abs(delta) * config.wheel.sensitivity, config.wheel.minDelta);
-                
-                // Calculate velocity in viewport heights per second
-                velocity = (normalizedDelta * config.animation.wheelDistance * 1000) / deltaTime;
-                
-                // Apply maximum speed limit (in viewport heights per second)
-                velocity = Math.max(-config.wheel.maxSpeed, 
-                                  Math.min(velocity, config.wheel.maxSpeed));
+            // Handle different delta modes (pixels, lines, or pages)
+            if (e.deltaMode === 1) {  // Lines
+                delta *= 40;  // Approximate line height
+            } else if (e.deltaMode === 2) {  // Pages
+                delta *= viewportHeight;
             }
             
-            // Smooth the velocity using weighted average
-            wheelVelocity = velocity * 0.3 + wheelVelocity * 0.7;
+            // Calculate time since last wheel event
+            const deltaTime = Math.min(now - lastWheelTime, 100);
+            lastWheelTime = now;
             
-            // Update target scroll position (in pixels)
-            targetScrollY += wheelVelocity * viewportHeight * (deltaTime / 1000);
-            targetScrollY = Math.max(0, Math.min(targetScrollY, maxScroll));
+            // Calculate velocity with improved sensitivity
+            let velocity = 0;
+            if (deltaTime > 0) {
+                // Apply non-linear sensitivity for better control
+                const absDelta = Math.abs(delta);
+                const direction = Math.sign(delta);
+                const normalizedDelta = direction * Math.min(
+                    Math.pow(absDelta * 0.2, 1.3) * config.wheel.sensitivity * 2,
+                    config.wheel.maxSpeed * 0.5
+                );
+                
+                // Smoother velocity calculation
+                velocity = (normalizedDelta * 1000) / Math.max(deltaTime, 1);
+                
+                // Apply speed limits
+                velocity = Math.max(-config.wheel.maxSpeed, Math.min(velocity, config.wheel.maxSpeed));
+            }
+            
+            // Smoother velocity tracking with inertia
+            const smoothFactor = Math.min(1, deltaTime / 16); // Normalize to 60fps
+            wheelVelocity = velocity * smoothFactor + wheelVelocity * (1 - smoothFactor);
+            
+            // Update target scroll position with easing
+            const scrollDistance = wheelVelocity * viewportHeight * (deltaTime / 1000);
+            targetScrollY = Math.max(0, Math.min(targetScrollY + scrollDistance, maxScroll));
             
             lastWheelDelta = delta;
             isScrolling = true;
             
-            // Start animation if not running
-            // Always ensure animation loop is running
+            // Ensure animation loop is running
             if (!animationFrameId) {
+                lastScrollTime = now;
                 animationFrameId = requestAnimationFrame(animateScroll);
             }
         } catch (error) {
@@ -248,27 +252,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check if device is mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    // Handle touch events for mobile - using smooth scrolling
+    // Handle touch events for mobile - using native scrolling
     let touchStartY = 0;
     let touchStartScrollY = 0;
     let lastTouchY = 0;
     let lastTouchTime = 0;
     let touchVelocity = 0;
     let isTouchActive = false;
+    let touchMoved = false;
+    let touchStartTime = 0;
     
     function handleTouchStart(e) {
-        if (!isMobile) return;
+        if (!isMobile || e.touches.length !== 1) return;
         
         const touch = e.touches[0];
         touchStartY = touch.clientY;
         lastTouchY = touchStartY;
         touchStartScrollY = window.scrollY;
         lastTouchTime = performance.now();
+        touchStartTime = lastTouchTime;
         isTouchActive = true;
+        touchMoved = false;
         touchVelocity = 0;
         
-        // Enable smooth scrolling for mobile
-        document.documentElement.style.scrollBehavior = 'smooth';
+        // Use native scrolling for better touch response
+        document.documentElement.style.scrollBehavior = 'auto';
         document.documentElement.style.overflowScrolling = 'touch';
         document.documentElement.style.webkitOverflowScrolling = 'touch';
         
@@ -277,57 +285,90 @@ document.addEventListener('DOMContentLoaded', function() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
+        
+        // Prevent default to avoid text selection and other default behaviors
+        e.preventDefault();
     }
     
     function handleTouchMove(e) {
-        if (!isMobile || !isTouchActive) return;
+        if (!isMobile || !isTouchActive || e.touches.length !== 1) return;
         
         const touchY = e.touches[0].clientY;
         const now = performance.now();
         const deltaTime = now - lastTouchTime;
         
+        // Mark that touch has moved
+        touchMoved = true;
+        
         if (deltaTime > 0) {
-            // Calculate velocity
+            // Calculate velocity with smoothing
             const deltaY = touchY - lastTouchY;
-            touchVelocity = (deltaY / deltaTime) * 1000; // pixels per second
+            const newVelocity = (deltaY / deltaTime) * 16; // pixels per 16ms (roughly 1 frame)
+            
+            // Apply low-pass filter to smooth out the velocity
+            touchVelocity = 0.3 * newVelocity + 0.7 * touchVelocity;
             lastTouchY = touchY;
             lastTouchTime = now;
             
-            // Directly update scroll position for immediate response
+            // Calculate the new scroll position
             const newScroll = touchStartScrollY - (touchY - touchStartY);
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             
-            // Apply boundaries
-            targetScrollY = Math.max(0, Math.min(newScroll, maxScroll));
+            // Apply boundaries and update scroll position
+            const boundedScroll = Math.max(0, Math.min(newScroll, maxScroll));
             
-            // Update current scroll position
-            currentScrollY = targetScrollY;
-            window.scrollTo(0, currentScrollY);
+            // Only update if we've moved significantly to prevent jitter
+            if (Math.abs(touchY - touchStartY) > 2) {
+                window.scrollTo(0, boundedScroll);
+            }
         }
+        
+        // Prevent default to avoid any default behaviors
+        e.preventDefault();
     }
     
-    function handleTouchEnd() {
-        if (!isMobile) return;
+    function handleTouchEnd(e) {
+        if (!isMobile || !isTouchActive) return;
         
         isTouchActive = false;
         
-        // Apply momentum if there's enough velocity
-        if (Math.abs(touchVelocity) > 100) {
-            const momentumDuration = 800; // ms
-            const distance = touchVelocity * (momentumDuration / 1000) * 0.3; // Reduced for subtle effect
+        // If it was a quick flick, apply momentum
+        const timeSinceStart = performance.now() - touchStartTime;
+        const isFlick = touchMoved && timeSinceStart < 300 && Math.abs(touchVelocity) > 20;
+        
+        if (isFlick) {
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const momentumDuration = 1000; // ms
             
-            // Calculate new target with boundaries
-            let newTarget = currentScrollY - distance;
-            targetScrollY = Math.max(0, Math.min(newTarget, maxScroll));
+            // Calculate distance based on velocity and time
+            const distance = touchVelocity * (momentumDuration / 1000) * 0.5; // Reduced coefficient
+            let newTarget = window.scrollY - distance;
             
-            // Start animation
-            if (!animationFrameId) {
-                isScrolling = true;
-                lastScrollTime = performance.now();
-                animationFrameId = requestAnimationFrame(animateScroll);
+            // Apply boundaries with rubber band effect
+            if (newTarget < 0) {
+                // Rubber band at top
+                newTarget = newTarget * 0.3;
+            } else if (newTarget > maxScroll) {
+                // Rubber band at bottom
+                newTarget = maxScroll + (newTarget - maxScroll) * 0.3;
             }
+            
+            // Ensure we stay within bounds
+            newTarget = Math.max(0, Math.min(newTarget, maxScroll));
+            
+            // Use smooth scroll for the momentum effect
+            window.scrollTo({
+                top: newTarget,
+                behavior: 'smooth'
+            });
         }
+        
+        // Reset states
+        touchVelocity = 0;
+        touchMoved = false;
+        
+        // Prevent default to avoid any default behaviors
+        e.preventDefault();
     }
     
     // Handle anchor links with smooth scrolling
@@ -375,13 +416,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Handle page visibility changes
     function handleVisibilityChange() {
-        if (!document.hidden) {
-            // Page became visible again
+        if (document.visibilityState === 'visible') {
+            // Reset scroll state when page becomes visible again
             resetScrollState();
-            // Start animation loop if not running
-            if (!animationFrameId) {
-                animationFrameId = requestAnimationFrame(animateScroll);
-            }
         }
     }
 
@@ -391,28 +428,19 @@ document.addEventListener('DOMContentLoaded', function() {
      * @returns {boolean} True if the event is from the scrollbar
      */
     function isScrollbarEvent(event) {
-        // For wheel events, check if mouse is over scrollbar
-        if (event.type === 'wheel' || event.type === 'mousedown' || event.type === 'click') {
-            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-            
-            // Check if mouse is in the scrollbar area (with a small buffer)
-            const inScrollbarX = event.clientX >= (window.innerWidth - scrollbarWidth - 10);
-            
-            // For click events, also check if clicking on a scrollbar element
-            let isClickingScrollbar = false;
-            if (event.type === 'mousedown' || event.type === 'click') {
-                const target = event.target;
-                const isScrollbarVisible = target.scrollHeight > target.clientHeight || 
-                                         target.scrollWidth > target.clientWidth;
-                const isScrollbarClick = (event.offsetX > target.clientWidth) || 
-                                       (event.offsetY > target.clientHeight);
-                isClickingScrollbar = isScrollbarVisible && isScrollbarClick;
-            }
-            
-            return inScrollbarX || isClickingScrollbar;
-        }
+        // Check if the event target is the scrollbar
+        const target = event.target;
+        const isScrollbar = target === document.documentElement ||
+                          target === document.body ||
+                          (target && (target.scrollHeight > target.clientHeight ||
+                                    target.scrollWidth > target.clientWidth));
         
-        return false;
+        // Check if the click is near the right edge of the viewport (where scrollbar typically is)
+        const viewportWidth = window.innerWidth;
+        const clickX = event.clientX;
+        const isNearRightEdge = clickX > viewportWidth - 20; // 20px from the right edge
+        
+        return isScrollbar || isNearRightEdge;
     }
 
     // Initialize the smooth scroll behavior
