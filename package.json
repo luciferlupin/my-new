@@ -5,7 +5,8 @@
   "description": "Kaizer - Building the Future of Business, Trading & AI",
   "scripts": {
     "dev": "python3 -m http.server 3000",
-    "build": "echo 'Build complete'"
+    "build": "echo 'Build complete'",
+    "vercel-build": "echo 'Vercel build complete'"
   },
   "vercel": {
     "outputDirectory": "."

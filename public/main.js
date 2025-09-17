@@ -1,0 +1,955 @@
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize process section animations
+    initProcessSection();
+    
+    // Initialize particles for showcase section if container exists
+    if (document.getElementById('particles-showcase')) {
+        console.log('Initializing particles for showcase section');
+        const showcaseParticles = particlesJS('particles-showcase', {
+            "particles": {
+                "number": {
+                    "value": 50,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.2,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.05,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 2,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 200,
+                    "color": "#ffffff",
+                    "opacity": 0.1,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false
+                    },
+                    "onclick": {
+                        "enable": false
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    }
+
+    // Initialize particles for options comparison section if container exists
+    if (document.getElementById('particles-options')) {
+        particlesJS('particles-options', {
+            "particles": {
+                "number": {
+                    "value": 50,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true
+                },
+                "size": {
+                    "value": 3,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 2,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.5
+                        }
+                    },
+                    "bubble": {
+                        "distance": 200,
+                        "size": 6,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 2
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+    
+    // Initialize particles for services section if container exists
+    if (document.getElementById('particles-services')) {
+        particlesJS('particles-services', {
+            "particles": {
+                "number": {
+                    "value": 35,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.15,
+                    "random": true
+                },
+                "size": {
+                    "value": 2,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 200,
+                    "color": "#ffffff",
+                    "opacity": 0.1,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false
+                    },
+                    "onclick": {
+                        "enable": false
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    }
+
+    // Initialize particles for our work section if container exists
+    if (document.getElementById('particles-ourwork')) {
+        particlesJS('particles-ourwork', {
+            "particles": {
+                "number": {
+                    "value": 40,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.2,
+                    "random": true
+                },
+                "size": {
+                    "value": 2.5,
+                    "random": true
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 180,
+                    "color": "#ffffff",
+                    "opacity": 0.15,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 1.5,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": false
+                    },
+                    "onclick": {
+                        "enable": false
+                    },
+                    "resize": true
+                }
+            },
+            "retina_detect": true
+        });
+    }
+
+    // Initialize particles for process section if container exists
+    if (document.getElementById('particles-process')) {
+        particlesJS('particles-process', {
+            "particles": {
+                "number": {
+                    "value": 60,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    }
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 2.5,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 200,
+                    "color": "#ffffff",
+                    "opacity": 0.1,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 0.5,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": true,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": false
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 150,
+                        "line_linked": {
+                            "opacity": 0.2
+                        }
+                    },
+                    "bubble": {
+                        "distance": 200,
+                        "size": 6,
+                        "duration": 0.4
+                    },
+                    "repulse": {
+                        "distance": 100,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 2
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+    
+    // Initialize particles for Our Work section
+    if (document.getElementById('particles-ourwork')) {
+        particlesJS('particles-ourwork', {
+            "particles": {
+                "number": {
+                    "value": 60,
+                    "density": {
+                        "enable": true,
+                        "value_area": 1000
+                    }
+                },
+                "color": {
+                    "value": "#ffffff"
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.1,
+                    "width": 1
+                },
+                "shape": {
+                    "type": "circle"
+                },
+                "opacity": {
+                    "value": 0.3,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 2,
+                    "random": true,
+                    "anim": {
+                        "enable": true,
+                        "speed": 2,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 0.8,
+                    "direction": "none",
+                    "random": true,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 0.2
+                        }
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+    }
+
+    // Initialize particles.js for hero section
+    particlesJS('particles-js', {
+        "particles": {
+            "number": {
+                "value": 80,
+                "density": {
+                    "enable": true,
+                    "value_area": 800
+                }
+            },
+            "color": {
+                "value": "#ffffff"
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#ffffff",
+                "opacity": 0.2,
+                "width": 1
+            },
+            "shape": {
+                "type": "circle",
+                "stroke": {
+                    "width": 0,
+                    "color": "#000000"
+                },
+                "polygon": {
+                    "nb_sides": 5
+                }
+            },
+            "opacity": {
+                "value": 0.5,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 1,
+                    "opacity_min": 0.1,
+                    "sync": false
+                }
+            },
+            "size": {
+                "value": 3,
+                "random": true,
+                "anim": {
+                    "enable": true,
+                    "speed": 2,
+                    "size_min": 0.1,
+                    "sync": false
+                }
+            },
+            "line_linked": {
+                "enable": true,
+                "distance": 150,
+                "color": "#ffffff",
+                "opacity": 0.2,
+                "width": 1
+            },
+            "move": {
+                "enable": true,
+                "speed": 1,
+                "direction": "none",
+                "random": true,
+                "straight": false,
+                "out_mode": "out",
+                "bounce": false,
+                "attract": {
+                    "enable": true,
+                    "rotateX": 600,
+                    "rotateY": 1200
+                }
+            }
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+                "onhover": {
+                    "enable": true,
+                    "mode": "grab"
+                },
+                "onclick": {
+                    "enable": true,
+                    "mode": "push"
+                },
+                "resize": true
+            },
+            "modes": {
+                "grab": {
+                    "distance": 140,
+                    "line_linked": {
+                        "opacity": 0.5
+                    }
+                },
+                "bubble": {
+                    "distance": 400,
+                    "size": 40,
+                    "duration": 2,
+                    "opacity": 8,
+                    "speed": 3
+                },
+                "repulse": {
+                    "distance": 200,
+                    "duration": 0.4
+                },
+                "push": {
+                    "particles_nb": 4
+                },
+                "remove": {
+                    "particles_nb": 2
+                }
+            }
+        },
+        "retina_detect": true
+    });
+
+    // Use native browser anchor navigation (no custom smooth scrolling)
+
+    // Animate process steps on scroll
+    function initProcessSection() {
+        const processSteps = document.querySelectorAll('.process-step');
+        
+        // Initial check for elements in viewport
+        checkIfInView();
+        
+        // Check on scroll
+        window.addEventListener('scroll', checkIfInView, { passive: true });
+        
+        function checkIfInView() {
+            processSteps.forEach((step, index) => {
+                const rect = step.getBoundingClientRect();
+                const isInView = (rect.top <= window.innerHeight * 0.8) && 
+                               (rect.bottom >= window.innerHeight * 0.2);
+                
+                if (isInView && !step.classList.contains('animate')) {
+                    step.classList.add('animate');
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateY(0)';
+                    
+                    // Animate each step with a delay
+                    setTimeout(() => {
+                        step.style.transition = 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
+                        
+                        // Trigger specific animations based on step
+                        const stepNumber = step.getAttribute('data-step');
+                        if (stepNumber === '1') animateStep1();
+                        if (stepNumber === '2') animateStep2();
+                        if (stepNumber === '3') animateStep3();
+                        if (stepNumber === '4') animateStep4();
+                        if (stepNumber === '5') animateStep5();
+                    }, index * 200);
+                }
+            });
+        }
+        
+        // Step 1: Toggle Switch Animation
+        function animateStep1() {
+            const toggle = document.querySelector('.toggle-switch');
+            const toggleInput = document.querySelector('.toggle-input');
+            const monthlyCard = document.querySelector('.monthly-info');
+            const yearlyCard = document.querySelector('.yearly-info');
+            const toggleHandle = document.querySelector('.toggle-handle');
+            const monthlyText = document.querySelector('.toggle-text.monthly');
+            const yearlyText = document.querySelector('.toggle-text.yearly');
+            
+            // Initial state
+            toggle.style.opacity = '0';
+            toggle.style.transform = 'translateY(10px)';
+            monthlyCard.style.display = 'block';
+            yearlyCard.style.display = 'none';
+            
+            // Set initial active state
+            monthlyText.classList.add('active');
+            
+            // Show info card with delay
+            setTimeout(() => {
+                monthlyCard.classList.add('visible');
+            }, 300);
+            
+            // Function to update toggle state
+            const updateToggleState = (isChecked) => {
+                // Update toggle handle position and text states
+                if (isChecked) {
+                    toggleHandle.style.transform = 'translateX(calc(100% - 6px))';
+                    monthlyText.classList.remove('active');
+                    yearlyText.classList.add('active');
+                } else {
+                    toggleHandle.style.transform = 'translateX(0)';
+                    monthlyText.classList.add('active');
+                    yearlyText.classList.remove('active');
+                }
+                
+                // Keep the original opacity transitions for visual feedback
+                monthlyText.style.opacity = isChecked ? '0.8' : '1';
+                yearlyText.style.opacity = isChecked ? '1' : '0.8';
+                
+                // Update toggle input state
+                toggleInput.checked = isChecked;
+                
+                // Toggle info cards
+                if (isChecked) {
+                    monthlyCard.style.opacity = '0';
+                    monthlyCard.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        monthlyCard.style.display = 'none';
+                        yearlyCard.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            yearlyCard.style.opacity = '1';
+                            yearlyCard.style.transform = 'translateY(0)';
+                        }, 20);
+                    }, 150);
+                    
+                    console.log('Yearly plan selected');
+                } else {
+                    yearlyCard.style.opacity = '0';
+                    yearlyCard.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        yearlyCard.style.display = 'none';
+                        monthlyCard.style.display = 'block';
+                        
+                        setTimeout(() => {
+                            monthlyCard.style.opacity = '1';
+                            monthlyCard.style.transform = 'translateY(0)';
+                        }, 20);
+                    }, 150);
+                    
+                    console.log('Monthly plan selected');
+                }
+            };
+            
+            // Animate in toggle
+            setTimeout(() => {
+                toggle.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                toggle.style.opacity = '1';
+                toggle.style.transform = 'translateY(0)';
+                
+                // Initial state
+                updateToggleState(false);
+                
+                // Add click handlers to text labels
+                monthlyText.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (toggleInput.checked) {
+                        updateToggleState(false);
+                    }
+                });
+                
+                yearlyText.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (!toggleInput.checked) {
+                        updateToggleState(true);
+                    }
+                });
+                
+                // Auto-toggle after delay for demo
+                setTimeout(() => {
+                    updateToggleState(true);
+                    
+                    // Auto-toggle back after delay for demo
+                    setTimeout(() => {
+                        updateToggleState(false);
+                    }, 2000);
+                }, 1000);
+                
+            }, 500);
+            
+            // Add keyboard navigation support
+            toggleInput.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    const isChecked = !toggleInput.checked;
+                    updateToggleState(isChecked);
+                }
+            });
+            
+            // Handle window resize
+            let resizeTimer;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(() => {
+                    if (toggleInput.checked) {
+                        toggleHandle.style.transform = 'translateX(calc(100% - 12px))';
+                    } else {
+                        toggleHandle.style.transform = 'translateX(6px)';
+                    }
+                }, 100);
+            });
+        }
+        
+        // Step 2: Request animation
+        function animateStep2() {
+            const icons = document.querySelectorAll('.request-icons .icon');
+            const requestBox = document.querySelector('.request-box');
+            const glowOrb = document.querySelector('.glow-orb');
+            
+            // Show glow orb
+            glowOrb.style.opacity = '0.3';
+            
+            // Animate icons one by one with floating effect
+            icons.forEach((icon, index) => {
+                setTimeout(() => {
+                    icon.style.opacity = '1';
+                    icon.style.transform = 'translateY(0)';
+                    
+                    // Add floating animation
+                    icon.style.animation = `floatIcons 3s ease-in-out ${index * 0.2}s infinite`;
+                    
+                    // Make icons fly to request box
+                    setTimeout(() => {
+                        icon.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
+                        icon.style.transform = 'translate(0, -30px) scale(0.8)';
+                        icon.style.opacity = '0.5';
+                        
+                        // On last icon, animate request box
+                        if (index === icons.length - 1) {
+                            setTimeout(() => {
+                                requestBox.style.borderColor = 'rgba(79, 172, 254, 0.4)';
+                                requestBox.style.boxShadow = '0 0 30px rgba(79, 172, 254, 0.2)';
+                                requestBox.style.transform = 'translateY(-5px)';
+                                
+                                // Pulsing effect
+                                setInterval(() => {
+                                    requestBox.style.transform = 'translateY(-7px)';
+                                    setTimeout(() => {
+                                        requestBox.style.transform = 'translateY(-5px)';
+                                    }, 500);
+                                }, 2000);
+                                
+                            }, 300);
+                        }
+                    }, 1500 + (index * 200));
+                }, index * 200);
+            });
+        }
+        
+        // Step 3: Build animation
+        function animateStep3() {
+            const codeLines = document.querySelector('.code-lines');
+            const productPreview = document.querySelector('.product-preview');
+            
+            // Create code lines
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'code-line';
+                codeLines.appendChild(line);
+            }
+            
+            // Animate code lines
+            const lines = document.querySelectorAll('.code-line');
+            lines.forEach((line, i) => {
+                setTimeout(() => {
+                    line.style.opacity = '1';
+                    line.style.transform = 'translateX(0)';
+                }, i * 200);
+            });
+            
+            // Show product preview after code animation
+            setTimeout(() => {
+                productPreview.style.opacity = '1';
+                productPreview.style.transform = 'translate(-50%, -50%) scale(1)';
+                
+                // Create grid pattern in preview
+                const previewContent = document.querySelector('.preview-content');
+                
+                // Add pulsing effect
+                setInterval(() => {
+                    previewContent.style.opacity = '0.6';
+                    setTimeout(() => {
+                        previewContent.style.opacity = '0.3';
+                    }, 500);
+                }, 2000);
+                
+            }, 1500);
+        }
+        
+        // Step 4: Test & Optimize animation
+        function animateStep4() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            
+            // Animate progress bars with different delays
+            progressBars.forEach((bar, index) => {
+                setTimeout(() => {
+                    const progress = bar.getAttribute('data-progress');
+                    bar.style.width = `${progress}%`;
+                    
+                    // Add percentage counter
+                    let current = 0;
+                    const target = parseInt(progress);
+                    const duration = 1500;
+                    const step = (target / (duration / 16)); // 60fps
+                    
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            bar.style.width = `${Math.ceil(current)}%`;
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            bar.style.width = `${target}%`;
+                        }
+                    };
+                    
+                    updateCounter();
+                    
+                }, index * 300);
+            });
+        }
+        
+        // Step 5: Scale & Lead animation
+        function animateStep5() {
+            const globe = document.querySelector('.globe');
+            const nodes = document.querySelectorAll('.node');
+            
+            // Start globe rotation
+            globe.style.animation = 'rotateGlobe 20s linear infinite';
+            
+            // Animate nodes with delay
+            nodes.forEach((node, index) => {
+                setTimeout(() => {
+                    node.style.animation = `nodePulse 4s ${index * 0.5}s infinite`;
+                    node.style.opacity = '0.8';
+                    node.style.transform = 'scale(1)';
+                }, index * 200);
+            });
+            
+            // Add connection lines between nodes
+            setTimeout(() => {
+                const canvas = document.createElement('canvas');
+                const container = document.querySelector('.globe-container');
+                canvas.style.position = 'absolute';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.pointerEvents = 'none';
+                container.appendChild(canvas);
+                
+                const ctx = canvas.getContext('2d');
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+                
+                // Draw connections
+                function drawConnections() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    // Get node positions
+                    const nodePositions = Array.from(nodes).map(node => {
+                        const rect = node.getBoundingClientRect();
+                        const containerRect = container.getBoundingClientRect();
+                        return {
+                            x: rect.left + rect.width/2 - containerRect.left,
+                            y: rect.top + rect.height/2 - containerRect.top
+                        };
+                    });
+                    
+                    // Draw lines between nodes
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                    ctx.lineWidth = 1;
+                    
+                    for (let i = 0; i < nodePositions.length; i++) {
+                        for (let j = i + 1; j < nodePositions.length; j++) {
+                            const distance = Math.sqrt(
+                                Math.pow(nodePositions[i].x - nodePositions[j].x, 2) + 
+                                Math.pow(nodePositions[i].y - nodePositions[j].y, 2)
+                            );
+                            
+                            if (distance < 200) {
+                                ctx.beginPath();
+                                ctx.moveTo(nodePositions[i].x, nodePositions[i].y);
+                                ctx.lineTo(nodePositions[j].x, nodePositions[j].y);
+                                ctx.stroke();
+                            }
+                        }
+                    }
+                    
+                    requestAnimationFrame(drawConnections);
+                }
+                
+                drawConnections();
+                
+                // Handle window resize
+                window.addEventListener('resize', () => {
+                    canvas.width = container.offsetWidth;
+                    canvas.height = container.offsetHeight;
+                });
+                
+            }, 500);
+        }
+    }
+});

@@ -1,0 +1,114 @@
+/* Mobile-specific carousel styles */
+@media (max-width: 768px) {
+  .carousel-section {
+    padding: 2rem var(--mobile-padding-x) !important;
+    overflow: hidden !important;
+  }
+
+  .carousel-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .carousel-header {
+    padding: 0 0 1.5rem 0 !important;
+    text-align: center !important;
+  }
+
+  .carousel-header h2 {
+    font-size: 1.75rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .carousel-track {
+    padding: 0.5rem 0 2rem 0 !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-padding: 0 var(--mobile-padding-x) !important;
+    padding-left: var(--mobile-padding-x) !important;
+    padding-right: var(--mobile-padding-x) !important;
+    margin: 0 calc(-1 * var(--mobile-padding-x)) !important;
+    width: calc(100% + (2 * var(--mobile-padding-x))) !important;
+  }
+
+  .carousel-slide {
+    min-width: 85% !important;
+    margin-right: 1rem !important;
+    scroll-snap-align: start !important;
+    scroll-snap-stop: always !important;
+    padding: 1.5rem !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .carousel-slide:last-child {
+    margin-right: var(--mobile-padding-x) !important;
+  }
+
+  .carousel-image {
+    height: 180px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .carousel-content h3 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .carousel-content p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .carousel-tag {
+    font-size: 0.8rem !important;
+    padding: 0.25rem 0.75rem !important;
+  }
+
+  .carousel-nav {
+    display: none !important;
+  }
+
+  .carousel-dots {
+    bottom: 0.5rem !important;
+  }
+
+  .carousel-dot {
+    width: 8px !important;
+    height: 8px !important;
+    margin: 0 4px !important;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .carousel-track::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .carousel-track {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+
+  /* Add visual feedback for touch */
+  .carousel-slide:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease !important;
+  }
+
+  /* Improve touch target sizes */
+  .carousel-slide a,
+  .carousel-slide button {
+    min-height: 44px !important;
+    min-width: 44px !important;
+  }
+
+  /* Adjust spacing for better mobile viewing */
+  .carousel-section {
+    margin: 1.5rem 0 !important;
+  }
+}
