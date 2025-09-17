@@ -201,7 +201,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    document.addEventListener('mousemove', (e) => {
+    // Mouse move handler
+    function handleMouseMove(e) {
         if (!isDragging) return;
         
         const x = e.pageX - track.getBoundingClientRect().left;
@@ -211,51 +212,43 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update position during drag
         currentPosition = newPosition;
         track.style.transform = `translateX(-${currentPosition}px)`;
-        
-        e.preventDefault();
-    });
+    }
     
-    // Touch events for mobile
-    track.addEventListener('touchstart', (e) => {
-        if (isAnimating) return;
+    // Touch event handlers
+    function handleTouchStart(e) {
         isDragging = true;
         startX = e.touches[0].pageX - track.getBoundingClientRect().left;
         scrollLeft = currentPosition;
         track.style.transition = 'none';
-    }, { passive: false });
+        track.style.cursor = 'grabbing';
+    }
     
-    track.addEventListener('touchend', () => {
-        if (isDragging) {
-            isDragging = false;
-            
-            // Calculate velocity for momentum scrolling
-            const velocity = (currentPosition - scrollLeft) / 10;
-            
-            // Snap to nearest card with momentum
-            const snapPosition = Math.round((currentPosition + velocity * 2) / cardWidth) * cardWidth;
-            currentPosition = snapPosition;
-            
-            // Animate to the snapped position
-            animateTo(currentPosition);
-            
-            // Check if we need to jump after animation
-            setTimeout(checkPosition, 600);
-        }
-    }, { passive: true });
+    function handleTouchEnd() {
+        isDragging = false;
+        track.style.transition = 'transform 0.3s ease-out';
+        track.style.cursor = 'grab';
+        checkPosition();
+    }
     
-    track.addEventListener('touchmove', (e) => {
+    function handleTouchMove(e) {
         if (!isDragging) return;
         
         const x = e.touches[0].pageX - track.getBoundingClientRect().left;
         const walk = (x - startX) * 1.5;
-        const newPosition = scrollLeft - walk;
-        
-        // Update position during drag
-        currentPosition = newPosition;
+        currentPosition = scrollLeft - walk;
         track.style.transform = `translateX(-${currentPosition}px)`;
         
-        e.preventDefault();
-    }, { passive: false });
+        // Only prevent default if we're actually dragging
+        if (Math.abs(x - startX) > 5) {
+            e.preventDefault();
+        }
+    }
+    
+    // Add event listeners with proper passive options
+    document.addEventListener('mousemove', handleMouseMove, { passive: true });
+    track.addEventListener('touchstart', handleTouchStart, { passive: true });
+    track.addEventListener('touchend', handleTouchEnd, { passive: true });
+    track.addEventListener('touchmove', handleTouchMove, { passive: false });
     
     // Auto-scroll functionality
     let autoScroll = setInterval(nextCard, 5000);
