@@ -4,13 +4,11 @@
   "version": "1.0.0",
   "description": "Kaizer - Building the Future of Business, Trading & AI",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "optimize-images": "node optimize-images.js"
+    "dev": "python3 -m http.server 3000",
+    "build": "echo 'Build complete'"
   },
   "vercel": {
-    "outputDirectory": "dist"
+    "outputDirectory": "."
   },
   "devDependencies": {
     "clean-css": "^5.3.2",
