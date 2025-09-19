@@ -1,4 +1,9 @@
 /* Mobile-specific carousel styles */
+:root {
+  --mobile-padding-x: 1.25rem;
+  --mobile-section-padding: 3rem 1.25rem;
+}
+
 @media (max-width: 768px) {
   .carousel-section {
     padding: 2rem var(--mobile-padding-x) !important;
@@ -29,11 +34,15 @@
     scroll-padding: 0 var(--mobile-padding-x) !important;
     padding-left: var(--mobile-padding-x) !important;
     padding-right: var(--mobile-padding-x) !important;
-    margin: 0 calc(-1 * var(--mobile-padding-x)) !important;
+    margin: 0 calc(-1 * var(--mobile-padding-x)) 0 !important;
     width: calc(100% + (2 * var(--mobile-padding-x))) !important;
+    overflow-x: auto !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
   }
 
   .carousel-slide {
+    flex: 0 0 85% !important;
     min-width: 85% !important;
     margin-right: 1rem !important;
     scroll-snap-align: start !important;
@@ -41,6 +50,7 @@
     padding: 1.5rem !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    box-sizing: border-box !important;
   }
 
   .carousel-slide:last-child {

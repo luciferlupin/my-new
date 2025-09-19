@@ -1,7 +1,23 @@
 /* Mobile-specific styles (max-width: 768px) */
+:root {
+  --mobile-padding-x: 1.25rem;
+  --mobile-section-padding: 3rem 1.25rem;
+  --mobile-card-margin: 1rem 0;
+  --mobile-text-scale: 0.9;
+}
 
 /* Base mobile reset */
 @media (max-width: 768px) {
+  * {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    position: relative;
+  }
   :root {
     --mobile-padding-x: 1.25rem;
     --mobile-section-padding: 3rem 1.25rem;
@@ -41,12 +57,17 @@
     padding-left: var(--mobile-padding-x) !important;
     padding-right: var(--mobile-padding-x) !important;
     max-width: 100% !important;
+    margin: 0 auto !important;
+    width: 100% !important;
   }
   
   /* Hero section */
   .hero {
     padding: 2rem var(--mobile-padding-x) !important;
     min-height: 80vh !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
   }
   
   .hero-title {

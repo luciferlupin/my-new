@@ -1,11 +1,19 @@
 /* Mobile-specific section spacing and layout */
+:root {
+  --mobile-padding-x: 1.25rem;
+  --mobile-section-padding: 3rem 1.25rem;
+}
+
 @media (max-width: 768px) {
   /* Base section styles */
   section {
-    padding: 3rem var(--mobile-padding-x) !important;
+    padding: var(--mobile-section-padding) !important;
     margin: 0 !important;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
   }
 
   /* Section headers */
@@ -46,10 +54,18 @@
 
   /* Process section */
   .process-step {
-    margin-bottom: 3rem !important;
+    margin-bottom: 2rem !important;
     padding: 1.5rem !important;
     border-radius: 12px !important;
     background: rgba(255, 255, 255, 0.03) !important;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+  /* Ensure proper spacing between sections */
+  section + section {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 
   /* Services section */
