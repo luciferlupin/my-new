@@ -10,10 +10,11 @@
     padding: var(--mobile-section-padding) !important;
     margin: 0 !important;
     position: relative;
-    overflow: hidden;
+    overflow: visible !important; /* Changed from hidden to visible */
     box-sizing: border-box;
-    width: 100%;
-    max-width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
   }
 
   /* Section headers */

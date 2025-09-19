@@ -17,6 +17,15 @@
     max-width: 100%;
     overflow-x: hidden;
     position: relative;
+    min-height: 100vh;
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll !important;
+  }
+  
+  /* Enable touch scrolling on all scrollable elements */
+  .scrollable {
+    -webkit-overflow-scrolling: touch;
   }
   :root {
     --mobile-padding-x: 1.25rem;
