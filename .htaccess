@@ -1,0 +1,12 @@
+# Serve manifest.json with correct MIME type
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+    AddType application/manifest+json .json
+</IfModule>
+
+# Enable CORS for manifest file
+<IfModule mod_headers.c>
+    <Files "manifest.json">
+        Header set Access-Control-Allow-Origin "*"
+    </Files>
+</IfModule>

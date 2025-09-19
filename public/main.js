@@ -6,17 +6,29 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     // Check if document is defined (for SSR)
-    if (typeof document === 'undefined') return;
+    if (typeof document === 'undefined' || !document.querySelector) {
+        console.warn('Document not available for DOM operations');
+        return;
+    }
 
-    // Utility functions with better error handling
+    /**
+     * Safely query a single DOM element
+     * @param {string} selector - CSS selector
+     * @param {Element|Document} [parent=document] - Parent element to search within
+     * @returns {Element|null} The found element or null
+     */
     const $ = (selector, parent = document) => {
         try {
-            if (!selector || typeof selector !== 'string') {
-                console.warn('Invalid selector provided to $()');
+            if (typeof selector !== 'string' || !selector.trim()) {
+                console.warn('Invalid selector provided to $():', String(selector));
+                return null;
+            }
+            if (!parent || !(parent instanceof Element || parent === document)) {
+                console.warn('Invalid parent element provided to $()');
                 return null;
             }
             const el = parent.querySelector(selector);
-            if (!el) {
+            if (!(el instanceof Element)) {
                 console.warn(`Element not found: ${selector}`);
                 return null;
             }
@@ -27,15 +39,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    /**
+     * Safely query multiple DOM elements
+     * @param {string} selector - CSS selector
+     * @param {Element|Document} [parent=document] - Parent element to search within
+     * @returns {Element[]} Array of found elements (empty if none found)
+     */
     const $$ = (selector, parent = document) => {
         try {
-            if (!selector || typeof selector !== 'string') {
-                console.warn('Invalid selector provided to $$()');
+            if (typeof selector !== 'string' || !selector.trim()) {
+                console.warn('Invalid selector provided to $$():', String(selector));
+                return [];
+            }
+            if (!parent || !(parent instanceof Element || parent === document)) {
+                console.warn('Invalid parent element provided to $$()');
                 return [];
             }
             const elements = Array.from(parent.querySelectorAll(selector));
             if (elements.length === 0) {
-                console.warn(`No elements found: ${selector}`);
+                console.warn(`No elements found for selector: ${selector}`);
             }
             return elements;
         } catch (error) {
@@ -44,29 +66,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    /**
+     * Safely apply styles to an element
+     * @param {Element|null} element - The element to style
+     * @param {Object.<string, string>} styles - Object of CSS styles to apply
+     * @returns {void}
+     */
     const safeStyle = (element, styles) => {
-        if (!element || !styles || typeof styles !== 'object') {
-            return;
-        }
         try {
-            Object.assign(element.style, styles);
+            if (!(element instanceof Element) || !element.style) {
+                console.warn('Invalid element provided to safeStyle()');
+                return;
+            }
+            if (typeof styles !== 'object' || styles === null) {
+                console.warn('Invalid styles object provided to safeStyle()');
+                return;
+            }
+            Object.entries(styles).forEach(([prop, value]) => {
+                if (typeof prop === 'string' && typeof value === 'string') {
+                    element.style[prop] = value;
+                }
+            });
         } catch (error) {
-            console.error('Error applying styles:', error);
+            console.error('Error in safeStyle():', error);
         }
     };
 
-    // Initialize components
+    /**
+     * Initialize all components with error handling
+     * @returns {void}
+     */
     function initComponents() {
         try {
             // Safely check for elements before initializing
             const processSection = $('#process');
-            if (processSection && typeof initProcessSection === 'function') {
-                initProcessSection();
+            if (processSection) {
+                if (typeof initProcessSection === 'function') {
+                    initProcessSection();
+                } else {
+                    console.warn('initProcessSection function not found');
+                }
             }
 
-            // Initialize particles if containers exist
+            // Initialize particles if containers exist and function is available
             if (typeof initParticles === 'function') {
                 initParticles();
+            } else {
+                console.warn('initParticles function not found');
             }
         } catch (error) {
             console.error('Error initializing components:', error);
@@ -142,31 +188,46 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Process section animations
+    /**
+     * Initialize process section with scroll animations
+     * @returns {void}
+     */
     function initProcessSection() {
         try {
             const processSteps = $$('.process-step');
-            if (!processSteps || !processSteps.length) {
+            if (!Array.isArray(processSteps) || processSteps.length === 0) {
                 console.warn('No process steps found');
                 return;
             }
 
             // Throttle scroll events for better performance
             let isScrolling = false;
+            let lastScrollTime = 0;
+            const SCROLL_THROTTLE = 100; // ms
             
-            // Check if elements are in viewport
+            /**
+             * Check if elements are in viewport and trigger animations
+             * @returns {void}
+             */
             function checkIfInView() {
-                if (isScrolling) return;
+                const now = Date.now();
+                if (isScrolling || now - lastScrollTime < SCROLL_THROTTLE) {
+                    return;
+                }
+                
                 isScrolling = true;
+                lastScrollTime = now;
                 
                 requestAnimationFrame(() => {
                     try {
-                        const windowHeight = window.innerHeight;
-                        const windowTop = window.scrollY || window.pageYOffset;
+                        const windowHeight = window.innerHeight || 0;
+                        const windowTop = Math.max(window.scrollY || 0, window.pageYOffset || 0, document.documentElement.scrollTop || 0);
                         const windowBottom = windowTop + windowHeight;
 
                         processSteps.forEach(step => {
-                            if (!step || !step.getBoundingClientRect) return;
+                            if (!(step instanceof Element) || typeof step.getBoundingClientRect !== 'function') {
+                                return;
+                            }
                             
                             const rect = step.getBoundingClientRect();
                             const elementTop = rect.top + windowTop;
@@ -175,16 +236,26 @@ document.addEventListener('DOMContentLoaded', function() {
                             // If element is in viewport
                             if (elementBottom >= windowTop && elementTop <= windowBottom) {
                                 const stepNumber = step.dataset?.step;
-                                const animationFunction = {
+                                if (!stepNumber) {
+                                    console.warn('Process step missing data-step attribute');
+                                    return;
+                                }
+                                
+                                const animationFunctions = {
                                     '1': animateStep1,
                                     '2': animateStep2,
                                     '3': animateStep3,
                                     '4': animateStep4,
                                     '5': animateStep5
-                                }[stepNumber];
+                                };
                                 
+                                const animationFunction = animationFunctions[stepNumber];
                                 if (typeof animationFunction === 'function') {
-                                    animationFunction();
+                                    try {
+                                        animationFunction();
+                                    } catch (e) {
+                                        console.error(`Error in animation function for step ${stepNumber}:`, e);
+                                    }
                                 }
                             }
                         });
@@ -196,35 +267,55 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-        // Animation for step 1
+        /**
+         * Animation for step 1
+         * @returns {void}
+         */
         function animateStep1() {
-            const elements = {
-                title: $('.process-step[data-step="1"] h3'),
-                description: $('.process-step[data-step="1"] p'),
-                icon: $('.process-step[data-step="1"] .icon')
-            };
+            try {
+                const stepContainer = $('.process-step[data-step="1"]');
+                if (!stepContainer) {
+                    console.warn('Step 1 container not found');
+                    return;
+                }
+                
+                const elements = {
+                    title: stepContainer.querySelector('h3'),
+                    description: stepContainer.querySelector('p'),
+                    icon: stepContainer.querySelector('.icon')
+                };
 
-            if (elements.title) elements.title.style.animation = 'fadeInUp 0.8s ease-out forwards';
-            if (elements.description) elements.description.style.animation = 'fadeInUp 0.8s ease-out 0.2s forwards';
-            if (elements.icon) elements.icon.style.animation = 'bounceIn 1s ease-out 0.4s forwards';
+                safeStyle(elements.title, { animation: 'fadeInUp 0.8s ease-out forwards' });
+                safeStyle(elements.description, { animation: 'fadeInUp 0.8s ease-out 0.2s forwards' });
+                safeStyle(elements.icon, { animation: 'bounceIn 1s ease-out 0.4s forwards' });
+            } catch (error) {
+                console.error('Error in animateStep1:', error);
+            }
         }
 
         // Animation for step 2 - Completely rewritten for reliability
         function animateStep2() {
             try {
-                // Safely get elements
-                const icons = Array.from(document.querySelectorAll('.request-icons .icon')).filter(Boolean);
+                // Safely get elements with null checks
+                const icons = Array.from(document.querySelectorAll('.request-icons .icon')).filter(icon => 
+                    icon && typeof icon === 'object' && 'style' in icon
+                );
+                
                 const requestBox = document.querySelector('.request-box');
                 
                 // Skip if no elements to animate
                 if (!icons.length && !requestBox) {
+                    console.log('No elements found to animate in step 2');
                     return;
                 }
                 
                 // Animate icons if they exist
                 if (icons.length > 0) {
                     icons.forEach((icon, index) => {
-                        if (!icon) return;
+                        if (!icon || typeof icon.style === 'undefined') {
+                            console.warn('Invalid icon element found, skipping animation');
+                            return;
+                        }
                         
                         // Initial state
                         safeStyle(icon, {
@@ -233,34 +324,44 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                         
                         // Animate after a delay
-                        setTimeout(() => {
-                            // First animation
-                            safeStyle(icon, {
-                                transition: 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
-                                transform: 'translate(0, -30px) scale(0.8)',
-                                opacity: '0.5'
-                            });
-                            
-                            // Animate request box after last icon
-                            if (index === icons.length - 1 && requestBox) {
-                                setTimeout(() => {
-                                    safeStyle(requestBox, { 
-                                        borderColor: 'rgba(79, 172, 254, 0.4)',
-                                        boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
-                                        transform: 'translateY(-5px)'
-                                    });
-                                }, 500);
+                        const timer = setTimeout(() => {
+                            try {
+                                // First animation
+                                safeStyle(icon, {
+                                    transition: 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                                    transform: 'translate(0, -30px) scale(0.8)',
+                                    opacity: '0.5'
+                                });
+                                
+                                // Animate request box after last icon
+                                if (index === icons.length - 1 && requestBox) {
+                                    setTimeout(() => {
+                                        safeStyle(requestBox, { 
+                                            borderColor: 'rgba(79, 172, 254, 0.4)',
+                                            boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
+                                            transform: 'translateY(-5px)'
+                                        });
+                                    }, 500);
+                                }
+                            } catch (e) {
+                                console.error('Error in icon animation:', e);
+                                clearTimeout(timer);
                             }
                         }, 1500 + (index * 200));
                     });
-                } else if (requestBox) {
+                } else if (requestBox && typeof requestBox.style !== 'undefined') {
                     // If no icons but requestBox exists, just animate the box
-                    setTimeout(() => {
-                        safeStyle(requestBox, { 
-                            borderColor: 'rgba(79, 172, 254, 0.4)',
-                            boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
-                            transform: 'translateY(-5px)'
-                        });
+                    const timer = setTimeout(() => {
+                        try {
+                            safeStyle(requestBox, { 
+                                borderColor: 'rgba(79, 172, 254, 0.4)',
+                                boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
+                                transform: 'translateY(-5px)'
+                            });
+                        } catch (e) {
+                            console.error('Error in requestBox animation:', e);
+                            clearTimeout(timer);
+                        }
                     }, 500);
                 }
             } catch (error) {
@@ -268,50 +369,74 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Animation for step 3 - Simplified to prevent errors
+        // Animation for step 3 - Code typing effect with error handling
         function animateStep3() {
-            // Safely get the code lines container
-            const codeLines = document.querySelector('.code-lines');
-            
-            // If codeLines doesn't exist, exit the function
-            if (!codeLines || !(codeLines instanceof HTMLElement)) {
-                return; // Silently exit if element doesn't exist
-            }
-            
-            // Clear existing content safely
-            if (codeLines && codeLines.innerHTML) {
-                codeLines.innerHTML = '';
-            }
-            
-            // Define code snippets
-            const codeSnippets = [
-                'function processRequest(data) {',
-                '  // Process incoming data',
-                '  const result = analyze(data);',
-                '  return optimize(result);',
-                '}'
-            ];
-            
-            // Process each line
-            codeSnippets.forEach((line, lineIndex) => {
-                // Create line element
-                const lineElement = document.createElement('div');
-                lineElement.className = 'code-line';
+            try {
+                // Safely get the code lines container
+                const codeLines = document.querySelector('.code-lines');
                 
-                // Safely append to container
-                if (codeLines && codeLines.appendChild) {
-                    codeLines.appendChild(lineElement);
-                    
-                    // Add typing effect
-                    for (let i = 0; i < line.length; i++) {
-                        setTimeout(() => {
-                            if (lineElement && lineElement.textContent !== undefined) {
-                                lineElement.textContent = line.substring(0, i + 1);
-                            }
-                        }, (lineIndex * 100) + (i * 50));
-                    }
+                // If codeLines doesn't exist or is not a valid element, exit the function
+                if (!codeLines || !(codeLines instanceof HTMLElement) || !codeLines.appendChild) {
+                    console.warn('Code lines container not found or invalid');
+                    return;
                 }
-            });
+
+                // Clear existing content safely
+                try {
+                    codeLines.innerHTML = '';
+                } catch (e) {
+                    console.error('Error clearing code lines container:', e);
+                    return;
+                }
+
+                // Define code snippets
+                const codeSnippets = [
+                    'function processRequest(data) {',
+                    '  // Process incoming data',
+                    '  const result = analyze(data);',
+                    '  return optimize(result);',
+                    '}'
+                ];
+                
+                // Process each line
+                codeSnippets.forEach((line, lineIndex) => {
+                    try {
+                        // Create line element
+                        const lineElement = document.createElement('div');
+                        lineElement.className = 'code-line';
+                        
+                        // Safely append to container
+                        try {
+                            if (codeLines && codeLines.appendChild) {
+                                codeLines.appendChild(lineElement);
+                            } else {
+                                console.warn('Cannot append to codeLines: invalid element');
+                                return;
+                            }
+                        } catch (e) {
+                            console.error('Error appending line element:', e);
+                            return;
+                        }
+                        
+                        // Add typing effect
+                        for (let i = 0; i < line.length; i++) {
+                            setTimeout(() => {
+                                try {
+                                    if (lineElement && lineElement.textContent !== undefined) {
+                                        lineElement.textContent = line.substring(0, i + 1);
+                                    }
+                                } catch (e) {
+                                    console.error('Error updating text content:', e);
+                                }
+                            }, (lineIndex * 100) + (i * 50));
+                        }
+                    } catch (e) {
+                        console.error('Error creating code line:', e);
+                    }
+                });
+            } catch (error) {
+                console.error('Error in animateStep3:', error);
+            }
         }
 
         // Animation for step 4
@@ -342,9 +467,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // Animation for step 5 - Completely disabled
+        // Animation for step 5
         function animateStep5() {
-            // All globe/map related code has been removed
+            // Animation handled by CSS
             return;
         }
 
@@ -374,12 +499,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize all components with error handling
     try {
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initComponents);
+            // Use a named function for proper cleanup
+            const initHandler = () => {
+                document.removeEventListener('DOMContentLoaded', initHandler);
+                initComponents();
+            };
+            document.addEventListener('DOMContentLoaded', initHandler);
         } else {
             // DOMContentLoaded has already fired
-            initComponents();
+            // Use setTimeout to ensure the DOM is fully ready
+            setTimeout(initComponents, 0);
         }
     } catch (error) {
         console.error('Error during initialization:', error);
+        // Try to initialize components anyway as a fallback
+        try {
+            initComponents();
+        } catch (e) {
+            console.error('Fallback initialization failed:', e);
+        }
     }
 });

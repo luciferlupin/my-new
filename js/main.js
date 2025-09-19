@@ -757,10 +757,6 @@ document.addEventListener('DOMContentLoaded', function() {
         function animateStep2() {
             const icons = document.querySelectorAll('.request-icons .icon');
             const requestBox = document.querySelector('.request-box');
-            const glowOrb = document.querySelector('.glow-orb');
-            
-            // Show glow orb
-            glowOrb.style.opacity = '0.3';
             
             // Animate icons one by one with floating effect
             icons.forEach((icon, index) => {
