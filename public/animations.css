@@ -1,3 +1,46 @@
+/* Scale Animation Container */
+.scale-animation-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    width: 100%;
+    position: relative;
+}
+
+.scale-icon {
+    font-size: 3.5rem;
+    color: #4facfe;
+    margin-bottom: 1rem;
+    animation: pulseScale 2s infinite ease-in-out;
+}
+
+.scale-text p {
+    color: #4facfe;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0;
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out 0.3s forwards;
+}
+
+@keyframes pulseScale {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+}
+
 /* Base Animation Styles */
 [class*="fade-in"],
 [class*="slide-in"],

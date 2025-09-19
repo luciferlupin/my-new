@@ -1,955 +1,385 @@
+/**
+ * Main JavaScript file for Kaizer Website
+ * This file includes all the interactive elements and animations
+ */
+
+// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize process section animations
-    initProcessSection();
-    
-    // Initialize particles for showcase section if container exists
-    if (document.getElementById('particles-showcase')) {
-        console.log('Initializing particles for showcase section');
-        const showcaseParticles = particlesJS('particles-showcase', {
-            "particles": {
-                "number": {
-                    "value": 50,
-                    "density": {
-                        "enable": true,
-                        "value_area": 1000
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    }
-                },
-                "opacity": {
-                    "value": 0.2,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.05,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 2,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 200,
-                    "color": "#ffffff",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": true,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": false
-                    },
-                    "onclick": {
-                        "enable": false
-                    },
-                    "resize": true
-                }
-            },
-            "retina_detect": true
-        });
-    }
+    // Check if document is defined (for SSR)
+    if (typeof document === 'undefined') return;
 
-    // Initialize particles for options comparison section if container exists
-    if (document.getElementById('particles-options')) {
-        particlesJS('particles-options', {
-            "particles": {
-                "number": {
-                    "value": 50,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true
-                },
-                "size": {
-                    "value": 3,
-                    "random": true
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.2,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 2,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
-                        "line_linked": {
-                            "opacity": 0.5
-                        }
-                    },
-                    "bubble": {
-                        "distance": 200,
-                        "size": 6,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 2
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true
-        });
-    }
-    
-    // Initialize particles for services section if container exists
-    if (document.getElementById('particles-services')) {
-        particlesJS('particles-services', {
-            "particles": {
-                "number": {
-                    "value": 35,
-                    "density": {
-                        "enable": true,
-                        "value_area": 1000
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.15,
-                    "random": true
-                },
-                "size": {
-                    "value": 2,
-                    "random": true
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 200,
-                    "color": "#ffffff",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": false
-                    },
-                    "onclick": {
-                        "enable": false
-                    },
-                    "resize": true
-                }
-            },
-            "retina_detect": true
-        });
-    }
-
-    // Initialize particles for our work section if container exists
-    if (document.getElementById('particles-ourwork')) {
-        particlesJS('particles-ourwork', {
-            "particles": {
-                "number": {
-                    "value": 40,
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.2,
-                    "random": true
-                },
-                "size": {
-                    "value": 2.5,
-                    "random": true
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 180,
-                    "color": "#ffffff",
-                    "opacity": 0.15,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1.5,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": false
-                    },
-                    "onclick": {
-                        "enable": false
-                    },
-                    "resize": true
-                }
-            },
-            "retina_detect": true
-        });
-    }
-
-    // Initialize particles for process section if container exists
-    if (document.getElementById('particles-process')) {
-        particlesJS('particles-process', {
-            "particles": {
-                "number": {
-                    "value": 60,
-                    "density": {
-                        "enable": true,
-                        "value_area": 1000
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "shape": {
-                    "type": "circle",
-                    "stroke": {
-                        "width": 0,
-                        "color": "#000000"
-                    }
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 2.5,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 200,
-                    "color": "#ffffff",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 0.5,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false,
-                    "attract": {
-                        "enable": true,
-                        "rotateX": 600,
-                        "rotateY": 1200
-                    }
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": false
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 150,
-                        "line_linked": {
-                            "opacity": 0.2
-                        }
-                    },
-                    "bubble": {
-                        "distance": 200,
-                        "size": 6,
-                        "duration": 0.4
-                    },
-                    "repulse": {
-                        "distance": 100,
-                        "duration": 0.4
-                    },
-                    "push": {
-                        "particles_nb": 2
-                    },
-                    "remove": {
-                        "particles_nb": 2
-                    }
-                }
-            },
-            "retina_detect": true
-        });
-    }
-    
-    // Initialize particles for Our Work section
-    if (document.getElementById('particles-ourwork')) {
-        particlesJS('particles-ourwork', {
-            "particles": {
-                "number": {
-                    "value": 60,
-                    "density": {
-                        "enable": true,
-                        "value_area": 1000
-                    }
-                },
-                "color": {
-                    "value": "#ffffff"
-                },
-                "line_linked": {
-                    "enable": true,
-                    "distance": 150,
-                    "color": "#ffffff",
-                    "opacity": 0.1,
-                    "width": 1
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.3,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 1,
-                        "opacity_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "size": {
-                    "value": 2,
-                    "random": true,
-                    "anim": {
-                        "enable": true,
-                        "speed": 2,
-                        "size_min": 0.1,
-                        "sync": false
-                    }
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 0.8,
-                    "direction": "none",
-                    "random": true,
-                    "straight": false,
-                    "out_mode": "out",
-                    "bounce": false
-                }
-            },
-            "interactivity": {
-                "detect_on": "canvas",
-                "events": {
-                    "onhover": {
-                        "enable": true,
-                        "mode": "grab"
-                    },
-                    "onclick": {
-                        "enable": true,
-                        "mode": "push"
-                    },
-                    "resize": true
-                },
-                "modes": {
-                    "grab": {
-                        "distance": 140,
-                        "line_linked": {
-                            "opacity": 0.2
-                        }
-                    },
-                    "push": {
-                        "particles_nb": 4
-                    }
-                }
-            },
-            "retina_detect": true
-        });
-    }
-
-    // Initialize particles.js for hero section
-    particlesJS('particles-js', {
-        "particles": {
-            "number": {
-                "value": 80,
-                "density": {
-                    "enable": true,
-                    "value_area": 800
-                }
-            },
-            "color": {
-                "value": "#ffffff"
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#ffffff",
-                "opacity": 0.2,
-                "width": 1
-            },
-            "shape": {
-                "type": "circle",
-                "stroke": {
-                    "width": 0,
-                    "color": "#000000"
-                },
-                "polygon": {
-                    "nb_sides": 5
-                }
-            },
-            "opacity": {
-                "value": 0.5,
-                "random": true,
-                "anim": {
-                    "enable": true,
-                    "speed": 1,
-                    "opacity_min": 0.1,
-                    "sync": false
-                }
-            },
-            "size": {
-                "value": 3,
-                "random": true,
-                "anim": {
-                    "enable": true,
-                    "speed": 2,
-                    "size_min": 0.1,
-                    "sync": false
-                }
-            },
-            "line_linked": {
-                "enable": true,
-                "distance": 150,
-                "color": "#ffffff",
-                "opacity": 0.2,
-                "width": 1
-            },
-            "move": {
-                "enable": true,
-                "speed": 1,
-                "direction": "none",
-                "random": true,
-                "straight": false,
-                "out_mode": "out",
-                "bounce": false,
-                "attract": {
-                    "enable": true,
-                    "rotateX": 600,
-                    "rotateY": 1200
-                }
+    // Utility functions with better error handling
+    const $ = (selector, parent = document) => {
+        try {
+            if (!selector || typeof selector !== 'string') {
+                console.warn('Invalid selector provided to $()');
+                return null;
             }
-        },
-        "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-                "onhover": {
-                    "enable": true,
-                    "mode": "grab"
-                },
-                "onclick": {
-                    "enable": true,
-                    "mode": "push"
-                },
-                "resize": true
-            },
-            "modes": {
-                "grab": {
-                    "distance": 140,
-                    "line_linked": {
-                        "opacity": 0.5
-                    }
-                },
-                "bubble": {
-                    "distance": 400,
-                    "size": 40,
-                    "duration": 2,
-                    "opacity": 8,
-                    "speed": 3
-                },
-                "repulse": {
-                    "distance": 200,
-                    "duration": 0.4
-                },
-                "push": {
-                    "particles_nb": 4
-                },
-                "remove": {
-                    "particles_nb": 2
-                }
+            const el = parent.querySelector(selector);
+            if (!el) {
+                console.warn(`Element not found: ${selector}`);
+                return null;
             }
-        },
-        "retina_detect": true
-    });
+            return el;
+        } catch (error) {
+            console.error('Error in $() utility:', error);
+            return null;
+        }
+    };
 
-    // Use native browser anchor navigation (no custom smooth scrolling)
+    const $$ = (selector, parent = document) => {
+        try {
+            if (!selector || typeof selector !== 'string') {
+                console.warn('Invalid selector provided to $$()');
+                return [];
+            }
+            const elements = Array.from(parent.querySelectorAll(selector));
+            if (elements.length === 0) {
+                console.warn(`No elements found: ${selector}`);
+            }
+            return elements;
+        } catch (error) {
+            console.error('Error in $$() utility:', error);
+            return [];
+        }
+    };
 
-    // Animate process steps on scroll
+    const safeStyle = (element, styles) => {
+        if (!element || !styles || typeof styles !== 'object') {
+            return;
+        }
+        try {
+            Object.assign(element.style, styles);
+        } catch (error) {
+            console.error('Error applying styles:', error);
+        }
+    };
+
+    // Initialize components
+    function initComponents() {
+        try {
+            // Safely check for elements before initializing
+            const processSection = $('#process');
+            if (processSection && typeof initProcessSection === 'function') {
+                initProcessSection();
+            }
+
+            // Initialize particles if containers exist
+            if (typeof initParticles === 'function') {
+                initParticles();
+            }
+        } catch (error) {
+            console.error('Error initializing components:', error);
+        }
+    }
+
+    // Initialize particles for different sections
+    function initParticles() {
+        const particleContainers = {
+            'particles-showcase': {
+                number: { value: 50 },
+                // Add other particle configurations as needed
+            },
+            'particles-options': {
+                number: { value: 50 }
+            },
+            'particles-ourwork': {
+                number: { value: 40 }
+            },
+            'particles-process': {
+                number: { value: 60 }
+            },
+            'particles-js': {
+                number: { value: 80 }
+            }
+        };
+
+        Object.entries(particleContainers).forEach(([id, config]) => {
+            const container = document.getElementById(id);
+            if (container && window.particlesJS) {
+                particlesJS(id, {
+                    particles: {
+                        ...config,
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: {
+                            value: 0.2,
+                            random: true,
+                            anim: { enable: true, speed: 1, opacity_min: 0.05 }
+                        },
+                        size: {
+                            value: 2,
+                            random: true,
+                            anim: { enable: true, speed: 2, size_min: 0.1 }
+                        },
+                        line_linked: {
+                            enable: true,
+                            distance: 200,
+                            color: "#ffffff",
+                            opacity: 0.1,
+                            width: 1
+                        },
+                        move: {
+                            enable: true,
+                            speed: 1,
+                            direction: "none",
+                            random: true,
+                            straight: false,
+                            out_mode: "out"
+                        }
+                    },
+                    interactivity: {
+                        detect_on: "canvas",
+                        events: {
+                            onhover: { enable: false },
+                            onclick: { enable: false },
+                            resize: true
+                        }
+                    },
+                    retina_detect: true
+                });
+            }
+        });
+    }
+
+    // Process section animations
     function initProcessSection() {
-        const processSteps = document.querySelectorAll('.process-step');
-        
-        // Initial check for elements in viewport
-        checkIfInView();
-        
-        // Check on scroll
-        window.addEventListener('scroll', checkIfInView, { passive: true });
-        
-        function checkIfInView() {
-            processSteps.forEach((step, index) => {
-                const rect = step.getBoundingClientRect();
-                const isInView = (rect.top <= window.innerHeight * 0.8) && 
-                               (rect.bottom >= window.innerHeight * 0.2);
+        try {
+            const processSteps = $$('.process-step');
+            if (!processSteps || !processSteps.length) {
+                console.warn('No process steps found');
+                return;
+            }
+
+            // Throttle scroll events for better performance
+            let isScrolling = false;
+            
+            // Check if elements are in viewport
+            function checkIfInView() {
+                if (isScrolling) return;
+                isScrolling = true;
                 
-                if (isInView && !step.classList.contains('animate')) {
-                    step.classList.add('animate');
-                    step.style.opacity = '1';
-                    step.style.transform = 'translateY(0)';
-                    
-                    // Animate each step with a delay
-                    setTimeout(() => {
-                        step.style.transition = 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)';
-                        
-                        // Trigger specific animations based on step
-                        const stepNumber = step.getAttribute('data-step');
-                        if (stepNumber === '1') animateStep1();
-                        if (stepNumber === '2') animateStep2();
-                        if (stepNumber === '3') animateStep3();
-                        if (stepNumber === '4') animateStep4();
-                        if (stepNumber === '5') animateStep5();
-                    }, index * 200);
-                }
-            });
-        }
-        
-        // Step 1: Toggle Switch Animation
+                requestAnimationFrame(() => {
+                    try {
+                        const windowHeight = window.innerHeight;
+                        const windowTop = window.scrollY || window.pageYOffset;
+                        const windowBottom = windowTop + windowHeight;
+
+                        processSteps.forEach(step => {
+                            if (!step || !step.getBoundingClientRect) return;
+                            
+                            const rect = step.getBoundingClientRect();
+                            const elementTop = rect.top + windowTop;
+                            const elementBottom = elementTop + (rect.height || 0);
+                            
+                            // If element is in viewport
+                            if (elementBottom >= windowTop && elementTop <= windowBottom) {
+                                const stepNumber = step.dataset?.step;
+                                const animationFunction = {
+                                    '1': animateStep1,
+                                    '2': animateStep2,
+                                    '3': animateStep3,
+                                    '4': animateStep4,
+                                    '5': animateStep5
+                                }[stepNumber];
+                                
+                                if (typeof animationFunction === 'function') {
+                                    animationFunction();
+                                }
+                            }
+                        });
+                    } catch (error) {
+                        console.error('Error in checkIfInView:', error);
+                    } finally {
+                        isScrolling = false;
+                    }
+                });
+            }
+
+        // Animation for step 1
         function animateStep1() {
-            const toggle = document.querySelector('.toggle-switch');
-            const toggleInput = document.querySelector('.toggle-input');
-            const monthlyCard = document.querySelector('.monthly-info');
-            const yearlyCard = document.querySelector('.yearly-info');
-            const toggleHandle = document.querySelector('.toggle-handle');
-            const monthlyText = document.querySelector('.toggle-text.monthly');
-            const yearlyText = document.querySelector('.toggle-text.yearly');
-            
-            // Initial state
-            toggle.style.opacity = '0';
-            toggle.style.transform = 'translateY(10px)';
-            monthlyCard.style.display = 'block';
-            yearlyCard.style.display = 'none';
-            
-            // Set initial active state
-            monthlyText.classList.add('active');
-            
-            // Show info card with delay
-            setTimeout(() => {
-                monthlyCard.classList.add('visible');
-            }, 300);
-            
-            // Function to update toggle state
-            const updateToggleState = (isChecked) => {
-                // Update toggle handle position and text states
-                if (isChecked) {
-                    toggleHandle.style.transform = 'translateX(calc(100% - 6px))';
-                    monthlyText.classList.remove('active');
-                    yearlyText.classList.add('active');
-                } else {
-                    toggleHandle.style.transform = 'translateX(0)';
-                    monthlyText.classList.add('active');
-                    yearlyText.classList.remove('active');
-                }
-                
-                // Keep the original opacity transitions for visual feedback
-                monthlyText.style.opacity = isChecked ? '0.8' : '1';
-                yearlyText.style.opacity = isChecked ? '1' : '0.8';
-                
-                // Update toggle input state
-                toggleInput.checked = isChecked;
-                
-                // Toggle info cards
-                if (isChecked) {
-                    monthlyCard.style.opacity = '0';
-                    monthlyCard.style.transform = 'translateY(10px)';
-                    
-                    setTimeout(() => {
-                        monthlyCard.style.display = 'none';
-                        yearlyCard.style.display = 'block';
-                        
-                        setTimeout(() => {
-                            yearlyCard.style.opacity = '1';
-                            yearlyCard.style.transform = 'translateY(0)';
-                        }, 20);
-                    }, 150);
-                    
-                    console.log('Yearly plan selected');
-                } else {
-                    yearlyCard.style.opacity = '0';
-                    yearlyCard.style.transform = 'translateY(10px)';
-                    
-                    setTimeout(() => {
-                        yearlyCard.style.display = 'none';
-                        monthlyCard.style.display = 'block';
-                        
-                        setTimeout(() => {
-                            monthlyCard.style.opacity = '1';
-                            monthlyCard.style.transform = 'translateY(0)';
-                        }, 20);
-                    }, 150);
-                    
-                    console.log('Monthly plan selected');
-                }
+            const elements = {
+                title: $('.process-step[data-step="1"] h3'),
+                description: $('.process-step[data-step="1"] p'),
+                icon: $('.process-step[data-step="1"] .icon')
             };
-            
-            // Animate in toggle
-            setTimeout(() => {
-                toggle.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                toggle.style.opacity = '1';
-                toggle.style.transform = 'translateY(0)';
-                
-                // Initial state
-                updateToggleState(false);
-                
-                // Add click handlers to text labels
-                monthlyText.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (toggleInput.checked) {
-                        updateToggleState(false);
-                    }
-                });
-                
-                yearlyText.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (!toggleInput.checked) {
-                        updateToggleState(true);
-                    }
-                });
-                
-                // Auto-toggle after delay for demo
-                setTimeout(() => {
-                    updateToggleState(true);
-                    
-                    // Auto-toggle back after delay for demo
-                    setTimeout(() => {
-                        updateToggleState(false);
-                    }, 2000);
-                }, 1000);
-                
-            }, 500);
-            
-            // Add keyboard navigation support
-            toggleInput.addEventListener('keydown', function(e) {
-                if (e.key === ' ' || e.key === 'Enter') {
-                    e.preventDefault();
-                    const isChecked = !toggleInput.checked;
-                    updateToggleState(isChecked);
-                }
-            });
-            
-            // Handle window resize
-            let resizeTimer;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimer);
-                resizeTimer = setTimeout(() => {
-                    if (toggleInput.checked) {
-                        toggleHandle.style.transform = 'translateX(calc(100% - 12px))';
-                    } else {
-                        toggleHandle.style.transform = 'translateX(6px)';
-                    }
-                }, 100);
-            });
+
+            if (elements.title) elements.title.style.animation = 'fadeInUp 0.8s ease-out forwards';
+            if (elements.description) elements.description.style.animation = 'fadeInUp 0.8s ease-out 0.2s forwards';
+            if (elements.icon) elements.icon.style.animation = 'bounceIn 1s ease-out 0.4s forwards';
         }
-        
-        // Step 2: Request animation
+
+        // Animation for step 2 - Completely rewritten for reliability
         function animateStep2() {
-            const icons = document.querySelectorAll('.request-icons .icon');
-            const requestBox = document.querySelector('.request-box');
-            const glowOrb = document.querySelector('.glow-orb');
-            
-            // Show glow orb
-            glowOrb.style.opacity = '0.3';
-            
-            // Animate icons one by one with floating effect
-            icons.forEach((icon, index) => {
-                setTimeout(() => {
-                    icon.style.opacity = '1';
-                    icon.style.transform = 'translateY(0)';
-                    
-                    // Add floating animation
-                    icon.style.animation = `floatIcons 3s ease-in-out ${index * 0.2}s infinite`;
-                    
-                    // Make icons fly to request box
-                    setTimeout(() => {
-                        icon.style.transition = 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)';
-                        icon.style.transform = 'translate(0, -30px) scale(0.8)';
-                        icon.style.opacity = '0.5';
+            try {
+                // Safely get elements
+                const icons = Array.from(document.querySelectorAll('.request-icons .icon')).filter(Boolean);
+                const requestBox = document.querySelector('.request-box');
+                
+                // Skip if no elements to animate
+                if (!icons.length && !requestBox) {
+                    return;
+                }
+                
+                // Animate icons if they exist
+                if (icons.length > 0) {
+                    icons.forEach((icon, index) => {
+                        if (!icon) return;
                         
-                        // On last icon, animate request box
-                        if (index === icons.length - 1) {
-                            setTimeout(() => {
-                                requestBox.style.borderColor = 'rgba(79, 172, 254, 0.4)';
-                                requestBox.style.boxShadow = '0 0 30px rgba(79, 172, 254, 0.2)';
-                                requestBox.style.transform = 'translateY(-5px)';
-                                
-                                // Pulsing effect
-                                setInterval(() => {
-                                    requestBox.style.transform = 'translateY(-7px)';
-                                    setTimeout(() => {
-                                        requestBox.style.transform = 'translateY(-5px)';
-                                    }, 500);
-                                }, 2000);
-                                
-                            }, 300);
-                        }
-                    }, 1500 + (index * 200));
-                }, index * 200);
-            });
+                        // Initial state
+                        safeStyle(icon, {
+                            opacity: '1',
+                            transform: 'translateY(0)'
+                        });
+                        
+                        // Animate after a delay
+                        setTimeout(() => {
+                            // First animation
+                            safeStyle(icon, {
+                                transition: 'all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                                transform: 'translate(0, -30px) scale(0.8)',
+                                opacity: '0.5'
+                            });
+                            
+                            // Animate request box after last icon
+                            if (index === icons.length - 1 && requestBox) {
+                                setTimeout(() => {
+                                    safeStyle(requestBox, { 
+                                        borderColor: 'rgba(79, 172, 254, 0.4)',
+                                        boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
+                                        transform: 'translateY(-5px)'
+                                    });
+                                }, 500);
+                            }
+                        }, 1500 + (index * 200));
+                    });
+                } else if (requestBox) {
+                    // If no icons but requestBox exists, just animate the box
+                    setTimeout(() => {
+                        safeStyle(requestBox, { 
+                            borderColor: 'rgba(79, 172, 254, 0.4)',
+                            boxShadow: '0 0 30px rgba(79, 172, 254, 0.2)',
+                            transform: 'translateY(-5px)'
+                        });
+                    }, 500);
+                }
+            } catch (error) {
+                console.error('Error in animateStep2:', error);
+            }
         }
-        
-        // Step 3: Build animation
+
+        // Animation for step 3 - Simplified to prevent errors
         function animateStep3() {
+            // Safely get the code lines container
             const codeLines = document.querySelector('.code-lines');
-            const productPreview = document.querySelector('.product-preview');
             
-            // Create code lines
-            for (let i = 0; i < 5; i++) {
-                const line = document.createElement('div');
-                line.className = 'code-line';
-                codeLines.appendChild(line);
+            // If codeLines doesn't exist, exit the function
+            if (!codeLines || !(codeLines instanceof HTMLElement)) {
+                return; // Silently exit if element doesn't exist
             }
             
-            // Animate code lines
-            const lines = document.querySelectorAll('.code-line');
-            lines.forEach((line, i) => {
-                setTimeout(() => {
-                    line.style.opacity = '1';
-                    line.style.transform = 'translateX(0)';
-                }, i * 200);
-            });
+            // Clear existing content safely
+            if (codeLines && codeLines.innerHTML) {
+                codeLines.innerHTML = '';
+            }
             
-            // Show product preview after code animation
-            setTimeout(() => {
-                productPreview.style.opacity = '1';
-                productPreview.style.transform = 'translate(-50%, -50%) scale(1)';
-                
-                // Create grid pattern in preview
-                const previewContent = document.querySelector('.preview-content');
-                
-                // Add pulsing effect
-                setInterval(() => {
-                    previewContent.style.opacity = '0.6';
-                    setTimeout(() => {
-                        previewContent.style.opacity = '0.3';
-                    }, 500);
-                }, 2000);
-                
-            }, 1500);
-        }
-        
-        // Step 4: Test & Optimize animation
-        function animateStep4() {
-            const progressBars = document.querySelectorAll('.progress-fill');
+            // Define code snippets
+            const codeSnippets = [
+                'function processRequest(data) {',
+                '  // Process incoming data',
+                '  const result = analyze(data);',
+                '  return optimize(result);',
+                '}'
+            ];
             
-            // Animate progress bars with different delays
-            progressBars.forEach((bar, index) => {
-                setTimeout(() => {
-                    const progress = bar.getAttribute('data-progress');
-                    bar.style.width = `${progress}%`;
-                    
-                    // Add percentage counter
-                    let current = 0;
-                    const target = parseInt(progress);
-                    const duration = 1500;
-                    const step = (target / (duration / 16)); // 60fps
-                    
-                    const updateCounter = () => {
-                        current += step;
-                        if (current < target) {
-                            bar.style.width = `${Math.ceil(current)}%`;
-                            requestAnimationFrame(updateCounter);
-                        } else {
-                            bar.style.width = `${target}%`;
-                        }
-                    };
-                    
-                    updateCounter();
-                    
-                }, index * 300);
-            });
-        }
-        
-        // Step 5: Scale & Lead animation
-        function animateStep5() {
-            const globe = document.querySelector('.globe');
-            const nodes = document.querySelectorAll('.node');
-            
-            // Start globe rotation
-            globe.style.animation = 'rotateGlobe 20s linear infinite';
-            
-            // Animate nodes with delay
-            nodes.forEach((node, index) => {
-                setTimeout(() => {
-                    node.style.animation = `nodePulse 4s ${index * 0.5}s infinite`;
-                    node.style.opacity = '0.8';
-                    node.style.transform = 'scale(1)';
-                }, index * 200);
-            });
-            
-            // Add connection lines between nodes
-            setTimeout(() => {
-                const canvas = document.createElement('canvas');
-                const container = document.querySelector('.globe-container');
-                canvas.style.position = 'absolute';
-                canvas.style.top = '0';
-                canvas.style.left = '0';
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
-                canvas.style.pointerEvents = 'none';
-                container.appendChild(canvas);
+            // Process each line
+            codeSnippets.forEach((line, lineIndex) => {
+                // Create line element
+                const lineElement = document.createElement('div');
+                lineElement.className = 'code-line';
                 
-                const ctx = canvas.getContext('2d');
-                canvas.width = container.offsetWidth;
-                canvas.height = container.offsetHeight;
-                
-                // Draw connections
-                function drawConnections() {
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Safely append to container
+                if (codeLines && codeLines.appendChild) {
+                    codeLines.appendChild(lineElement);
                     
-                    // Get node positions
-                    const nodePositions = Array.from(nodes).map(node => {
-                        const rect = node.getBoundingClientRect();
-                        const containerRect = container.getBoundingClientRect();
-                        return {
-                            x: rect.left + rect.width/2 - containerRect.left,
-                            y: rect.top + rect.height/2 - containerRect.top
-                        };
-                    });
-                    
-                    // Draw lines between nodes
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-                    ctx.lineWidth = 1;
-                    
-                    for (let i = 0; i < nodePositions.length; i++) {
-                        for (let j = i + 1; j < nodePositions.length; j++) {
-                            const distance = Math.sqrt(
-                                Math.pow(nodePositions[i].x - nodePositions[j].x, 2) + 
-                                Math.pow(nodePositions[i].y - nodePositions[j].y, 2)
-                            );
-                            
-                            if (distance < 200) {
-                                ctx.beginPath();
-                                ctx.moveTo(nodePositions[i].x, nodePositions[i].y);
-                                ctx.lineTo(nodePositions[j].x, nodePositions[j].y);
-                                ctx.stroke();
+                    // Add typing effect
+                    for (let i = 0; i < line.length; i++) {
+                        setTimeout(() => {
+                            if (lineElement && lineElement.textContent !== undefined) {
+                                lineElement.textContent = line.substring(0, i + 1);
                             }
-                        }
+                        }, (lineIndex * 100) + (i * 50));
                     }
-                    
-                    requestAnimationFrame(drawConnections);
                 }
+            });
+        }
+
+        // Animation for step 4
+        function animateStep4() {
+            try {
+                const testResults = $('.test-results');
+                const metrics = $$('.metric');
                 
-                drawConnections();
-                
-                // Handle window resize
-                window.addEventListener('resize', () => {
-                    canvas.width = container.offsetWidth;
-                    canvas.height = container.offsetHeight;
+                safeStyle(testResults, {
+                    opacity: '1',
+                    transform: 'translateY(0)',
+                    transition: 'opacity 0.5s ease, transform 0.5s ease'
                 });
                 
-            }, 500);
+                metrics.forEach((metric, index) => {
+                    if (!metric) return;
+                    
+                    setTimeout(() => {
+                        safeStyle(metric, {
+                            opacity: '1',
+                            transform: 'scale(1)',
+                            transition: 'opacity 0.3s ease, transform 0.3s ease'
+                        });
+                    }, index * 200);
+                });
+            } catch (error) {
+                console.error('Error in animateStep4:', error);
+            }
         }
+
+        // Animation for step 5 - Completely disabled
+        function animateStep5() {
+            // All globe/map related code has been removed
+            return;
+        }
+
+            // Initial check and scroll listener with debounce
+            if (typeof checkIfInView === 'function') {
+                // Initial check
+                checkIfInView();
+                
+                // Debounce the scroll event
+                let scrollTimeout;
+                const handleScroll = () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(checkIfInView, 100);
+                };
+                
+                // Add event listener
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                
+                // Also check on window resize
+                window.addEventListener('resize', handleScroll, { passive: true });
+            }
+        } catch (error) {
+            console.error('Error initializing process section:', error);
+        }
+    }
+
+    // Initialize all components with error handling
+    try {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initComponents);
+        } else {
+            // DOMContentLoaded has already fired
+            initComponents();
+        }
+    } catch (error) {
+        console.error('Error during initialization:', error);
     }
 });
